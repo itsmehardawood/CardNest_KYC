@@ -37,59 +37,6 @@ const ScanningPage = () => {
     return null;
   };
 
-  // Helper to convert data URL to Blob
-  const dataUrlToBlob = (dataUrl) => {
-    const byteString = atob(dataUrl.split(',')[1]);
-    const ab = new ArrayBuffer(byteString.length);
-    const ia = new Uint8Array(ab);
-    for (let i = 0; i < byteString.length; i++) {
-      ia[i] = byteString.charCodeAt(i);
-    }
-    return new Blob([ab], { type: 'image/jpeg' });
-  };
-
-  // Send KYC verification with documents and selfie
-  const sendKycVerification = async (selfieBlob, userId) => {
-    try {
-      // Retrieve stored document images
-      const docFrontDataUrl = sessionStorage.getItem('documentFront');
-      const docBackDataUrl = sessionStorage.getItem('documentBack');
-
-      if (!docFrontDataUrl || !selfieBlob) {
-        console.error('Missing required documents or selfie');
-        return { ok: false };
-      }
-
-      const formData = new FormData();
-      formData.append('user_id', userId);
-      formData.append('merchant_id', MERCHANT_ID);
-      formData.append('document_front', dataUrlToBlob(docFrontDataUrl), 'id_front.jpg');
-      
-      if (docBackDataUrl) {
-        formData.append('document_back', dataUrlToBlob(docBackDataUrl), 'id_back.jpg');
-      }
-      
-      formData.append('selfie', selfieBlob, 'selfie.jpg');
-
-      const response = await fetch('https://api.cardnest.io/kyc/verify', {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`KYC API error: ${response.status} - ${errorText}`);
-      }
-
-      const data = await response.json();
-      console.log('KYC verification response:', data);
-      return { ok: true, data };
-    } catch (err) {
-      console.error('Error sending KYC verification:', err);
-      return { ok: false };
-    }
-  };
-
   // Send liveness verification to backend
   const sendLivenessVerification = async () => {
     try {
@@ -101,11 +48,10 @@ const ScanningPage = () => {
         return { ok: false };
       }
 
-      // API appears to expect multipart/form-data; JSON body was rejected as missing fields
+      // API expects multipart/form-data
       const formData = new FormData();
       formData.append('user_id', userId);
       formData.append('merchant_id', MERCHANT_ID);
-      // Send as file field named face_images[] (common for multiple files); keep single for now
       formData.append('face_images', frameData, 'selfie.jpg');
 
       const response = await fetch('https://api.cardnest.io/kyc/liveness', {
@@ -126,28 +72,17 @@ const ScanningPage = () => {
       const userIdFromApi = data?.user_id || userId;
       const profileId = data?.raw_data?.profile_id || '';
 
-      // After liveness passes, send full KYC verification
-      const kycResult = await sendKycVerification(frameData, userIdFromApi);
-
-      if (!kycResult.ok) {
-        console.error('KYC verification failed');
-        return { ok: false };
-      }
-
-      const kycData = kycResult.data;
-      const kycStatus = (kycData?.status || '').toString();
-      const kycProfileId = kycData?.raw_data?.profile_id || profileId;
-
+      // Cache liveness results for document verification page
       try {
         sessionStorage.setItem('faceImageUrl', faceUrl);
-        sessionStorage.setItem('livenessStatus', kycStatus); // Use KYC status
+        sessionStorage.setItem('livenessStatus', livenessStatus);
         sessionStorage.setItem('livenessUserId', userIdFromApi);
-        sessionStorage.setItem('livenessProfileId', kycProfileId);
+        sessionStorage.setItem('livenessProfileId', profileId);
       } catch (storageError) {
         console.warn('Unable to cache liveness data', storageError);
       }
 
-      return { ok: true, faceUrl, status: kycStatus };
+      return { ok: true, faceUrl, status: livenessStatus };
     } catch (err) {
       console.error('Error sending liveness verification:', err);
       return { ok: false };
@@ -193,6 +128,8 @@ const ScanningPage = () => {
             setIsLoading(false);
             if (result.ok) {
               setTimeout(() => {
+                // Mark this as liveness verification stage
+                sessionStorage.setItem('verificationStage', 'liveness');
                 router.push('/success');
               }, 500);
             } else {

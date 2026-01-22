@@ -180,6 +180,91 @@ const DocumentVerificationPage = () => {
   };
 
   const readyToUpload = frontCaptured && backCaptured;
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handleUpload = async () => {
+    if (!readyToUpload) return;
+    setIsUploading(true);
+
+    try {
+      // Get user ID from sessionStorage (set during liveness check)
+      const userId = sessionStorage.getItem('livenessUserId') || `user_${Date.now()}`;
+      const merchantId = '434343j4n43k4';
+      const selfieUrl = sessionStorage.getItem('faceImageUrl');
+
+      // Convert data URLs to Blobs
+      const dataUrlToBlob = (dataUrl) => {
+        if (!dataUrl) return null;
+        const byteString = atob(dataUrl.split(',')[1]);
+        const ab = new ArrayBuffer(byteString.length);
+        const ia = new Uint8Array(ab);
+        for (let i = 0; i < byteString.length; i++) {
+          ia[i] = byteString.charCodeAt(i);
+        }
+        return new Blob([ab], { type: 'image/jpeg' });
+      };
+
+      const formData = new FormData();
+      formData.append('user_id', userId);
+      formData.append('merchant_id', merchantId);
+      formData.append('document_front', dataUrlToBlob(frontImage), 'id_front.jpg');
+      
+      if (backImage) {
+        formData.append('document_back', dataUrlToBlob(backImage), 'id_back.jpg');
+      }
+
+      // Fetch the selfie as Blob if we have the URL
+      let selfieBlob = null;
+      if (selfieUrl) {
+        const response = await fetch(selfieUrl);
+        selfieBlob = await response.blob();
+      }
+
+      if (selfieBlob) {
+        formData.append('selfie', selfieBlob, 'selfie.jpg');
+      }
+
+      const response = await fetch('https://api.cardnest.io/kyc/verify', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`KYC API error: ${response.status} - ${errorText}`);
+      }
+
+      const data = await response.json();
+      console.log('KYC verification response:', data);
+
+      // Cache KYC result
+      const kycStatus = (data?.status || '').toString();
+      const profileId = data?.raw_data?.profile_id || sessionStorage.getItem('livenessProfileId');
+      const outputImages = data?.output_images || {};
+      const warnings = data?.warnings || [];
+      const rawData = data?.raw_data || {};
+
+      try {
+        sessionStorage.setItem('livenessStatus', kycStatus);
+        sessionStorage.setItem('livenessProfileId', profileId);
+        sessionStorage.setItem('verificationStage', 'kyc');
+        // Store additional KYC data
+        sessionStorage.setItem('kycOutputImages', JSON.stringify(outputImages));
+        sessionStorage.setItem('kycWarnings', JSON.stringify(warnings));
+        sessionStorage.setItem('kycRawData', JSON.stringify(rawData));
+      } catch (storageError) {
+        console.warn('Unable to cache KYC data', storageError);
+      }
+
+      // Navigate to success page
+      router.push('/success');
+    } catch (err) {
+      console.error('Error uploading documents:', err);
+      alert('Failed to upload documents. Please try again.');
+    } finally {
+      setIsUploading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-white px-4 py-4 text-black">
@@ -226,13 +311,13 @@ const DocumentVerificationPage = () => {
 
         <button
           type="button"
-          disabled={!readyToUpload}
-          onClick={() => readyToUpload && router.push('/scanning')}
+          disabled={!readyToUpload || isUploading}
+          onClick={handleUpload}
           className={` w-full rounded-xl px-4 py-4 mt-30 text-lg font-semibold text-white transition ${
-            readyToUpload ? 'bg-cyan-500 hover:bg-cyan-600' : 'bg-cyan-400 cursor-not-allowed'
+            readyToUpload && !isUploading ? 'bg-cyan-500 hover:bg-cyan-600' : 'bg-cyan-400 cursor-not-allowed'
           }`}
         >
-          Upload documents
+          {isUploading ? 'Uploading...' : 'Upload documents'}
         </button>
       </div>
 
