@@ -179,7 +179,7 @@ const DocumentVerificationPage = () => {
     }
   };
 
-  const readyToUpload = frontCaptured && backCaptured;
+  const readyToUpload = frontCaptured;
   const [isUploading, setIsUploading] = useState(false);
 
   const handleUpload = async () => {
@@ -289,7 +289,7 @@ const DocumentVerificationPage = () => {
       <div className="mx-auto max-w-3xl">
         <div className="mb-10 space-y-3 flex flex-col justify-center items-center text-center">
           <h1 className="text-3xl font-bold">Take your photo ID</h1>
-          <p className="text-gray-700">Capture clear photos of the front and back of your government-issued ID. Make sure all details are readable.</p>
+          <p className="text-gray-700">Capture clear photos of your government-issued ID. Front is required; back is optional.</p>
         </div>
 
         <div className="grid gap-6">
@@ -300,13 +300,16 @@ const DocumentVerificationPage = () => {
             isCaptured={frontCaptured}
             onClick={() => handleOpen('front')}
           />
-          <PlaceholderCard
-            label="Back"
-            image={backImage}
-            placeholderSrc={placeholderBack}
-            isCaptured={backCaptured}
-            onClick={() => handleOpen('back')}
-          />
+          <div>
+            <p className="text-sm text-gray-500 mb-2">Back (Optional)</p>
+            <PlaceholderCard
+              label="Back"
+              image={backImage}
+              placeholderSrc={placeholderBack}
+              isCaptured={backCaptured}
+              onClick={() => handleOpen('back')}
+            />
+          </div>
         </div>
 
         <button

@@ -79,31 +79,57 @@ const SuccessPage = () => {
 
       {/* Display document images if KYC stage */}
       {verificationStage === 'kyc' && kycImages && (
-        <div className="w-full max-w-md mb-8 space-y-4">
-          {kycImages.front && (
-            <div className="border border-gray-600 rounded-lg overflow-hidden">
-              <p className="text-gray-400 text-sm px-4 pt-2">ID Front</p>
-              <img src={kycImages.front} alt="ID Front" className="w-full h-auto" />
-            </div>
-          )}
-          {kycImages.back && (
-            <div className="border border-gray-600 rounded-lg overflow-hidden">
-              <p className="text-gray-400 text-sm px-4 pt-2">ID Back</p>
-              <img src={kycImages.back} alt="ID Back" className="w-full h-auto" />
-            </div>
-          )}
+        <div className="w-full max-w-4xl mb-8">
+          {/* Selfie in circular frame */}
           {kycImages.original_selfie && (
-            <div className="border border-gray-600 rounded-lg overflow-hidden">
-              <p className="text-gray-400 text-sm px-4 pt-2">Selfie</p>
-              <img src={kycImages.original_selfie} alt="Selfie" className="w-full h-auto" />
+            <div className="flex justify-center mb-6">
+              <div className={`w-40 h-40 md:w-48 md:h-48 rounded-full border-4 ${borderColor} bg-gray-700 overflow-hidden shadow-xl`}>
+                <img 
+                  src={kycImages.original_selfie} 
+                  alt="Selfie" 
+                  className="w-full h-full object-cover" 
+                />
+              </div>
             </div>
           )}
+          
+          {/* Document images in grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 px-2">
+            {kycImages.front && (
+              <div className="bg-gray-700/50 rounded-xl overflow-hidden shadow-lg border border-gray-600/50 transition hover:shadow-2xl">
+                <div className="bg-gray-800/70 px-4 py-2 border-b border-gray-600/50">
+                  <p className="text-cyan-400 text-sm font-semibold">ID Front</p>
+                </div>
+                <div className="p-2">
+                  <img 
+                    src={kycImages.front} 
+                    alt="ID Front" 
+                    className="w-full  h-auto  rounded-lg" 
+                  />
+                </div>
+              </div>
+            )}
+            {kycImages.back && (
+              <div className="bg-gray-700/50 rounded-xl overflow-hidden shadow-lg border border-gray-600/50 transition hover:shadow-2xl">
+                <div className="bg-gray-800/70 px-4 py-2 border-b border-gray-600/50">
+                  <p className="text-cyan-400 text-sm font-semibold">ID Back</p>
+                </div>
+                <div className="p-2">
+                  <img 
+                    src={kycImages.back} 
+                    alt="ID Back" 
+                    className="w-full h-auto rounded-lg" 
+                  />
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       )}
 
       {/* Display single face/selfie for liveness stage */}
       {verificationStage === 'liveness' && (
-        <div className={`w-48 h-48 md:w-56 md:h-56 rounded-full border-4 ${borderColor} bg-gray-700 flex items-center justify-center mt-2 overflow-hidden flex-shrink-0`}>
+        <div className={`w-48 h-48 md:w-56 md:h-56 rounded-full border-4 ${borderColor} bg-gray-700 flex items-center justify-center mt-2 overflow-hidden flex-shrink-0 shadow-xl`}>
           {faceImage ? (
             <img
               src={faceImage}
@@ -119,7 +145,7 @@ const SuccessPage = () => {
       <div className="mt-6 flex flex-col items-center space-y-2 text-center">
         <p className={`${accentColor} text-3xl md:text-4xl font-semibold`}>Scan Complete</p>
         <p className={`${accentColor} text-sm md:text-lg`}>Profile ID: <span className='text-gray-200'>{profileId || 'N/A'}</span></p>
-        <p className={`${accentColor} text-sm md:text-lg`}>Employee ID: <span className='text-gray-200'>{userId || 'N/A'}</span></p>
+        {/* <p className={`${accentColor} text-sm md:text-lg`}>Employee ID: <span className='text-gray-200'>{userId || 'N/A'}</span></p> */}
         <p className={`${accentColor} text-sm md:text-lg`}>Status: <span className='text-gray-200'>{status || 'Unknown'}</span></p>
       </div>
 
