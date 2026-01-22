@@ -163,9 +163,19 @@ const DocumentVerificationPage = () => {
     if (activeSide === 'front') {
       setFrontImage(dataUrl);
       setFrontCaptured(true);
+      try {
+        sessionStorage.setItem('documentFront', dataUrl);
+      } catch (err) {
+        console.warn('Failed to cache document front', err);
+      }
     } else if (activeSide === 'back') {
       setBackImage(dataUrl);
       setBackCaptured(true);
+      try {
+        sessionStorage.setItem('documentBack', dataUrl);
+      } catch (err) {
+        console.warn('Failed to cache document back', err);
+      }
     }
   };
 
@@ -217,6 +227,7 @@ const DocumentVerificationPage = () => {
         <button
           type="button"
           disabled={!readyToUpload}
+          onClick={() => readyToUpload && router.push('/scanning')}
           className={` w-full rounded-xl px-4 py-4 mt-30 text-lg font-semibold text-white transition ${
             readyToUpload ? 'bg-cyan-500 hover:bg-cyan-600' : 'bg-cyan-400 cursor-not-allowed'
           }`}
