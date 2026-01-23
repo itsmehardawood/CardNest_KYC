@@ -7,8 +7,10 @@ const ScanningPage = () => {
   const [progress, setProgress] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [isCameraReady, setIsCameraReady] = useState(false);
+  const [countdown, setCountdown] = useState(null); // 3, 2, 1 countdown
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
+  const isVerificationSentRef = useRef(false); // Prevent duplicate API calls
   const MERCHANT_ID = '434343j4n43k4';
 
   // Generate random user ID
@@ -37,14 +39,24 @@ const ScanningPage = () => {
     return null;
   };
 
-  // Send liveness verification to backend
+  // Send liveness verification to backend - ONLY ONCE
   const sendLivenessVerification = async () => {
+    // Prevent duplicate calls - critical for cost control
+    if (isVerificationSentRef.current) {
+      console.log('Verification already sent, skipping duplicate call');
+      return { ok: false, duplicate: true };
+    }
+
+    // Mark as sent immediately to prevent race conditions
+    isVerificationSentRef.current = true;
+
     try {
       const frameData = captureFrame();
       const userId = generateRandomUserId();
 
       if (!frameData) {
         console.error('Failed to capture frame');
+        isVerificationSentRef.current = false; // Reset on failure
         return { ok: false };
       }
 
@@ -61,11 +73,12 @@ const ScanningPage = () => {
 
       if (!response.ok) {
         const errorText = await response.text();
+        isVerificationSentRef.current = false; // Reset on error to allow retry
         throw new Error(`API error: ${response.status} - ${errorText}`);
       }
 
       const data = await response.json();
-      console.log('Liveness verification response:', data);
+      // console.log('Liveness verification response:', data);
 
       const faceUrl = data?.output_images?.face || '';
       const livenessStatus = (data?.status || '').toString();
@@ -90,6 +103,14 @@ const ScanningPage = () => {
   };
 
   useEffect(() => {
+    // Ensure user went through document verification first
+    const stage = sessionStorage.getItem('verificationStage');
+    if (stage !== 'document') {
+      // Redirect to document verification if not completed
+      router.push('/document-verification');
+      return;
+    }
+
     // Access the camera
     navigator.mediaDevices.getUserMedia({ video: true })
       .then((stream) => {
@@ -111,40 +132,69 @@ const ScanningPage = () => {
         videoRef.current.srcObject.getTracks().forEach(track => track.stop());
       }
     };
-  }, []);
+  }, [router]);
 
   useEffect(() => {
-    // Only start scanning after camera is ready
-    if (!isCameraReady) return;
+    // Start countdown immediately when camera is ready
+    if (!isCameraReady || countdown !== null) return;
+    
+    setCountdown(3);
+  }, [isCameraReady, countdown]);
 
-    // Simulate scanning progress
+  // Countdown effect
+  useEffect(() => {
+    if (countdown === null) return;
+
+    if (countdown > 0) {
+      const timer = setTimeout(() => {
+        setCountdown(countdown - 1);
+      }, 1000);
+      return () => clearTimeout(timer);
+    } else {
+      // Countdown finished (reached 0), send verification
+      if (!isVerificationSentRef.current && !isLoading) {
+        setIsLoading(true);
+        sendLivenessVerification().then((result) => {
+          setIsLoading(false);
+          
+          // Handle duplicate call attempt
+          if (result.duplicate) {
+            console.log('Duplicate verification prevented');
+            return;
+          }
+          
+          if (result.ok) {
+            setTimeout(() => {
+              // Mark this as final liveness verification stage (after document)
+              sessionStorage.setItem('verificationStage', 'liveness');
+              router.push('/success');
+            }, 500);
+          } else {
+            // On error, allow retry by resetting the flag
+            isVerificationSentRef.current = false;
+            setCountdown(null);
+          }
+        });
+      }
+    }
+  }, [countdown, isLoading, router]);
+
+  // Simulate progress bar during verification
+  useEffect(() => {
+    if (!isLoading) {
+      setProgress(0);
+      return;
+    }
+
     const interval = setInterval(() => {
       setProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          // Send liveness verification when progress is complete
-          setIsLoading(true);
-          sendLivenessVerification().then((result) => {
-            setIsLoading(false);
-            if (result.ok) {
-              setTimeout(() => {
-                // Mark this as liveness verification stage
-                sessionStorage.setItem('verificationStage', 'liveness');
-                router.push('/success');
-              }, 500);
-            } else {
-              // Optionally reset or show error
-              setProgress(0);
-            }
-          });
-          return 100;
-        }
+        if (prev >= 90) return 90; // Stop at 90% until API responds
         return prev + 10;
       });
-    }, 300);
+    }, 200);
 
     return () => clearInterval(interval);
-  }, [isCameraReady, router]);
+  }, [isLoading]);
 
   return (
     <div className="flex flex-col items-center justify-around py-20 h-screen bg-slate-800">
@@ -168,14 +218,21 @@ const ScanningPage = () => {
         {/* Realistic face-shaped oval with cyan background */}
         <div className="absolute inset-0 flex items-center justify-center">
        <div
-  className="border-4 border-cyan-500 border-dotted opacity-80"
+  className="border-4 border-cyan-500 border-dotted opacity-80 flex items-center justify-center"
   style={{
     width: '60%',                   // slightly narrower than video
     height: '65%',                  // taller
     backgroundColor: 'rgba(0, 255, 255, 0.2)', // cyan 20% opacity
               borderRadius: '60% 60% 50% 50% / 40% 40% 60% 60%', // rounded chin
   }}
-></div>
+>
+  {/* Countdown number inside face oval */}
+  {countdown !== null && countdown > 0 && (
+    <div className="text-white text-8xl font-bold animate-pulse">
+      {countdown}
+    </div>
+  )}
+</div>
 
         </div>
       </div>
@@ -189,7 +246,7 @@ const ScanningPage = () => {
           ></div>
         </div>
         <p className="text-white mt-2 text-center">
-          {!isCameraReady ? 'Initializing camera...' : isLoading ? 'Verifying... Please wait' : `Scanning... ${progress}%`}
+          {!isCameraReady ? 'Initializing camera...' : isLoading ? `Verifying... ${progress}%` : countdown !== null && countdown > 0 ? 'Get ready...' : 'Processing...'}
         </p>
       </div>
     </div>

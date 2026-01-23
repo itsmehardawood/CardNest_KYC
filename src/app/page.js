@@ -8,7 +8,7 @@ const HomePage = () => {
   const [lines, setLines] = useState([]);
 
   const handleGetStarted = () => {
-    router.push('/scanning');
+    router.push('/document-verification');
   };
 
   useEffect(() => {
@@ -139,7 +139,7 @@ const HomePage = () => {
 
       {/* TEXT */}
       <h1 className="text-white text-5xl mt-4">
-        FACE <span className="text-cyan-300">ID</span>
+        ID  <span className="text-cyan-300">Verify</span>
       </h1>
 
       <p className="text-gray-100 text-center mt-2 px-4 max-w-xl">

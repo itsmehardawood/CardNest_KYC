@@ -187,10 +187,9 @@ const DocumentVerificationPage = () => {
     setIsUploading(true);
 
     try {
-      // Get user ID from sessionStorage (set during liveness check)
-      const userId = sessionStorage.getItem('livenessUserId') || `user_${Date.now()}`;
+      // Generate user ID for this session
+      const userId = `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
       const merchantId = '434343j4n43k4';
-      const selfieUrl = sessionStorage.getItem('faceImageUrl');
 
       // Convert data URLs to Blobs
       const dataUrlToBlob = (dataUrl) => {
@@ -213,16 +212,7 @@ const DocumentVerificationPage = () => {
         formData.append('document_back', dataUrlToBlob(backImage), 'id_back.jpg');
       }
 
-      // Fetch the selfie as Blob if we have the URL
-      let selfieBlob = null;
-      if (selfieUrl) {
-        const response = await fetch(selfieUrl);
-        selfieBlob = await response.blob();
-      }
-
-      if (selfieBlob) {
-        formData.append('selfie', selfieBlob, 'selfie.jpg');
-      }
+      // No selfie required at this stage - selfie/liveness will be done after
 
       const response = await fetch('https://api.cardnest.io/kyc/verify', {
         method: 'POST',
@@ -235,28 +225,29 @@ const DocumentVerificationPage = () => {
       }
 
       const data = await response.json();
-      console.log('KYC verification response:', data);
+      // console.log('Document verification response:', data);
 
-      // Cache KYC result
-      const kycStatus = (data?.status || '').toString();
-      const profileId = data?.raw_data?.profile_id || sessionStorage.getItem('livenessProfileId');
+      // Cache document verification result
+      const docStatus = (data?.status || '').toString();
+      const profileId = data?.raw_data?.profile_id || '';
       const outputImages = data?.output_images || {};
       const warnings = data?.warnings || [];
       const rawData = data?.raw_data || {};
 
       try {
-        sessionStorage.setItem('livenessStatus', kycStatus);
+        sessionStorage.setItem('livenessStatus', docStatus);
         sessionStorage.setItem('livenessProfileId', profileId);
-        sessionStorage.setItem('verificationStage', 'kyc');
-        // Store additional KYC data
+        sessionStorage.setItem('livenessUserId', userId);
+        sessionStorage.setItem('verificationStage', 'document');
+        // Store additional document data
         sessionStorage.setItem('kycOutputImages', JSON.stringify(outputImages));
         sessionStorage.setItem('kycWarnings', JSON.stringify(warnings));
         sessionStorage.setItem('kycRawData', JSON.stringify(rawData));
       } catch (storageError) {
-        console.warn('Unable to cache KYC data', storageError);
+        console.warn('Unable to cache document data', storageError);
       }
 
-      // Navigate to success page
+      // Navigate to success page (will then proceed to liveness)
       router.push('/success');
     } catch (err) {
       console.error('Error uploading documents:', err);
