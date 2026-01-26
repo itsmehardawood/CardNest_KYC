@@ -12,26 +12,8 @@ const SuccessPage = () => {
   const [kycImages, setKycImages] = useState({});
   const [kycWarnings, setKycWarnings] = useState([]);
 
-  const handlePrimary = () => {
-    if (isPass) {
-      // If document stage passed, move to liveness/face verification
-      if (verificationStage === 'document') {
-        router.push('/scanning');
-      } else {
-        // Liveness stage passed - verification complete, go home or finish
-        router.push('/');
-      }
-    } else {
-      // If failed, go back to retry the current stage
-      if (verificationStage === 'liveness') {
-        router.push('/scanning');
-      } else {
-        router.push('/document-type');
-      }
-    }
-  };
-
-  useEffect(() => {
+  // Refresh data function
+  const refreshData = () => {
     try {
       const cached = sessionStorage.getItem('faceImageUrl') || '';
       const cachedStatus = sessionStorage.getItem('livenessStatus') || '';
@@ -52,7 +34,41 @@ const SuccessPage = () => {
     } catch (err) {
       console.warn('Unable to read cached data', err);
     }
+  };
+
+  useEffect(() => {
+    // Initial load
+    refreshData();
   }, []);
+
+  const handlePrimary = () => {
+    // Refresh data to ensure we have the latest state
+    refreshData();
+
+    // Small delay to let state update
+    setTimeout(() => {
+      const currentStage = sessionStorage.getItem('verificationStage') || '';
+      const currentStatus = sessionStorage.getItem('livenessStatus') || '';
+      const isCurrentPass = currentStatus === 'PASS' || currentStatus === 'ACCEPT';
+
+      if (isCurrentPass) {
+        // If document stage passed, move to liveness/face verification
+        if (currentStage === 'document') {
+          router.push('/scanning');
+        } else {
+          // Liveness stage passed - verification complete, go home or finish
+          router.push('/');
+        }
+      } else {
+        // If failed, go back to retry the current stage
+        if (currentStage === 'liveness') {
+          router.push('/scanning');
+        } else {
+          router.push('/document-type');
+        }
+      }
+    }, 50);
+  };
 
   const isPass = useMemo(() => {
     if (!status) return true; // Default to pass while loading to prevent flash
