@@ -8,7 +8,7 @@ const HomePage = () => {
   const [lines, setLines] = useState([]);
 
   const handleGetStarted = () => {
-    router.push('/document-verification');
+    router.push('/document-type');
   };
 
   useEffect(() => {

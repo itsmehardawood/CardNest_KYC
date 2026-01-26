@@ -26,7 +26,7 @@ const SuccessPage = () => {
       if (verificationStage === 'liveness') {
         router.push('/scanning');
       } else {
-        router.push('/document-verification');
+        router.push('/document-type');
       }
     }
   };
@@ -105,7 +105,7 @@ const SuccessPage = () => {
       {verificationStage === 'document' && kycImages && (
         <div className="w-full max-w-4xl mb-8">
           {/* Face image from document in circular frame */}
-          {kycImages.face && (
+          {/* {kycImages.face && (
             <div className="flex justify-center mb-6">
               <div className={`w-40 h-40 md:w-48 md:h-48 rounded-full border-4 ${borderColor} bg-gray-700 overflow-hidden shadow-xl`}>
                 <img 
@@ -115,7 +115,7 @@ const SuccessPage = () => {
                 />
               </div>
             </div>
-          )}
+          )} */}
           
           {/* Document images in grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 px-2">
