@@ -166,7 +166,7 @@ const ScanningPage = () => {
     }
   };
 
-  // Movement sequence - 3 seconds per movement
+  // Movement sequence - 5 seconds per movement (slowed down for better accuracy)
   const startMovementSequence = () => {
     let step = 0;
     const interval = setInterval(() => {
@@ -179,9 +179,9 @@ const ScanningPage = () => {
         // Recording complete, stop recording
         setTimeout(() => {
           stopRecording();
-        }, 3000); // Hold last position for 3 seconds
+        }, 5000); // Hold last position for 5 seconds
       }
-    }, 3000);
+    }, 5000);
   };
 
   // Stop video recording
@@ -218,7 +218,7 @@ const ScanningPage = () => {
       formData.append('merchant_id', MERCHANT_ID);
       formData.append('face_video', videoBlob, 'liveness_video.webm');
 
-      const response = await fetch('https://api.cardnest.io/kyc/liveness', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/kyc/liveness`, {
         method: 'POST',
         body: formData,
       });
@@ -229,19 +229,27 @@ const ScanningPage = () => {
       }
 
       const data = await response.json();
+      
+      // Log full API response for debugging
+      // console.log('=== LIVENESS API FULL RESPONSE ===' );
+      // console.log(JSON.stringify(data, null, 2));
+      // console.log('==================================');
 
       const faceUrl = data?.output_images?.face || '';
       const livenessStatus = (data?.status || '').toString();
       const userIdFromApi = data?.user_id || userId;
       const profileId = data?.raw_data?.profile_id || '';
+      const livenessWarnings = data?.warnings || [];
 
-      // Cache liveness results
+      // Cache liveness results (isolated from document verification)
       try {
         sessionStorage.setItem('faceImageUrl', faceUrl);
         sessionStorage.setItem('livenessStatus', livenessStatus);
         sessionStorage.setItem('livenessUserId', userIdFromApi);
         sessionStorage.setItem('livenessProfileId', profileId);
         sessionStorage.setItem('verificationStage', 'liveness');
+        // Store liveness-specific warnings (separate from document warnings)
+        sessionStorage.setItem('livenessWarnings', JSON.stringify(livenessWarnings));
       } catch (storageError) {
         // Storage error - continue anyway
       }
@@ -262,17 +270,17 @@ const ScanningPage = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+    <div className="flex flex-col min-h-screen" style={{backgroundColor: '#3f0000'}}>
       {/* Preparation Screen */}
       {showPreparation && (
         <div className="flex flex-col items-center justify-center flex-1 px-6 py-20">
           <div className="max-w-md w-full space-y-8">
             {/* Icon */}
             <div className="flex justify-center">
-              <div className="rounded-full bg-cyan-500/10 p-6">
+              <div className="rounded-full bg-red-500/20 p-6">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-16 w-16 text-cyan-400"
+                  className="h-16 w-16 text-white"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -297,17 +305,17 @@ const ScanningPage = () => {
               <h1 className="text-3xl font-bold text-white">
                 Face Liveness Check
               </h1>
-              <p className="text-gray-400 text-lg">
+              <p className="text-red-100 text-lg">
                 We need to verify that you're a real person
               </p>
             </div>
 
             {/* Instructions */}
-            <div className="bg-slate-700/50 rounded-xl p-6 space-y-4 border border-slate-600">
+            <div className="bg-red-900/30 rounded-xl p-6 space-y-4 border border-red-700/50">
               <h2 className="text-white font-semibold text-lg flex items-center gap-2">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 text-cyan-400"
+                  className="h-5 w-5 text-red-200"
                   viewBox="0 0 20 20"
                   fill="currentColor"
                 >
@@ -319,38 +327,38 @@ const ScanningPage = () => {
                 </svg>
                 Instructions
               </h2>
-              <ul className="space-y-3 text-gray-300">
+              <ul className="space-y-3 text-red-100">
                 <li className="flex items-start gap-3">
-                  <span className="text-cyan-400 font-bold flex-shrink-0">1.</span>
+                  <span className="text-red-200 font-bold flex-shrink-0">1.</span>
                   <span>Position your face within the oval frame</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="text-cyan-400 font-bold flex-shrink-0">2.</span>
+                  <span className="text-red-200 font-bold flex-shrink-0">2.</span>
                   <span>Follow the instructions to move your face in different directions</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="text-cyan-400 font-bold flex-shrink-0">3.</span>
+                  <span className="text-red-200 font-bold flex-shrink-0">3.</span>
                   <span>Keep your movements slow and steady</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="text-cyan-400 font-bold flex-shrink-0">4.</span>
+                  <span className="text-red-200 font-bold flex-shrink-0">4.</span>
                   <span>The process will take about 12 seconds</span>
                 </li>
               </ul>
             </div>
 
             {/* Tips */}
-            <div className="bg-cyan-500/10 rounded-lg border border-cyan-500/20 p-4">
+            <div className="bg-red-500/10 rounded-lg border border-red-500/30 p-4">
               <div className="flex gap-3">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 text-cyan-400 flex-shrink-0 mt-0.5"
+                  className="h-5 w-5 text-red-200 flex-shrink-0 mt-0.5"
                   viewBox="0 0 20 20"
                   fill="currentColor"
                 >
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                 </svg>
-                <div className="text-sm text-cyan-300 space-y-1">
+                <div className="text-sm text-red-100 space-y-1">
                   <p className="font-semibold">Tips for best results:</p>
                   <p>Ensure good lighting and remove glasses if possible</p>
                 </div>
@@ -360,7 +368,7 @@ const ScanningPage = () => {
             {/* Start Button */}
             <button
               onClick={handleStartCheck}
-              className="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-4 px-6 rounded-xl transition-all transform hover:scale-105 shadow-lg hover:shadow-cyan-500/50"
+              className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-4 px-6 rounded-xl transition-all transform hover:scale-105 shadow-lg hover:shadow-red-500/50"
             >
               Start Face Verification
             </button>
@@ -368,7 +376,7 @@ const ScanningPage = () => {
             {/* Back button */}
             <button
               onClick={() => router.back()}
-              className="w-full text-gray-400 hover:text-gray-300 font-medium py-2 transition-colors"
+              className="w-full text-red-200 hover:text-white font-medium py-2 transition-colors"
             >
               Go Back
             </button>

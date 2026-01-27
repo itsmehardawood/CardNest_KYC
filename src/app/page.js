@@ -52,10 +52,41 @@ const HomePage = () => {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-around py-20 h-screen bg-slate-800">
+    <div className="flex flex-col items-center justify-around py-20 h-screen" style={{backgroundColor: '#3f0000'}}>
 
-      {/* REALISTIC FACE SHAPE */}
-      <div className="relative w-40 h-56">
+      {/* KYC VERIFICATION VISUALS */}
+      <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12 mb-8">
+        
+        {/* GOVERNMENT ID CARD VISUAL */}
+        <div className="relative w-36 h-24 md:w-48 md:h-32">
+          {/* ID Card Border */}
+          <svg className="absolute inset-0 w-full h-full" viewBox="0 0 192 128">
+            <rect
+              x="4" y="4" width="184" height="120"
+              fill="none"
+              stroke="#ffffff"
+              strokeWidth="2.5"
+              rx="8"
+              ry="8"
+            />
+            {/* Inner card details */}
+            <rect x="12" y="12" width="40" height="32" fill="#ffffff" opacity="0.3" rx="2"/>
+            <line x1="60" y1="16" x2="140" y2="16" stroke="#ffffff" strokeWidth="1.5" opacity="0.7"/>
+            <line x1="60" y1="24" x2="120" y2="24" stroke="#ffffff" strokeWidth="1.5" opacity="0.7"/>
+            <line x1="60" y1="32" x2="160" y2="32" stroke="#ffffff" strokeWidth="1.5" opacity="0.7"/>
+            <line x1="12" y1="52" x2="180" y2="52" stroke="#ffffff" strokeWidth="1" opacity="0.5"/>
+            <line x1="12" y1="60" x2="140" y2="60" stroke="#ffffff" strokeWidth="1" opacity="0.5"/>
+            <line x1="12" y1="68" x2="160" y2="68" stroke="#ffffff" strokeWidth="1" opacity="0.5"/>
+            <line x1="12" y1="76" x2="120" y2="76" stroke="#ffffff" strokeWidth="1" opacity="0.5"/>
+          </svg>
+          <div className="absolute top-2 right-2 text-white text-xs font-bold opacity-70">ID</div>
+        </div>
+
+        {/* PLUS ICON */}
+        <div className="text-white text-4xl font-bold opacity-70">+</div>
+
+        {/* REALISTIC FACE SHAPE */}
+        <div className="relative w-32 h-44 md:w-40 md:h-56">
         {/* SVG Border outline */}
         <svg className="absolute inset-0 w-full h-full" viewBox="0 0 160 224">
           <path
@@ -73,7 +104,7 @@ const HomePage = () => {
                C 148 30, 142 20, 135 15
                C 125 8, 100 5, 80 5 Z"
             fill="none"
-            stroke="#06b6d4"
+            stroke="#ffffff"
             strokeWidth="3.5"
             strokeLinejoin="round"
             strokeLinecap="round"
@@ -94,7 +125,7 @@ const HomePage = () => {
             return (
               <span
                 key={i}
-                className="absolute h-[1px] bg-cyan-400"
+                className="absolute h-[1px] bg-white"
                 style={{
                   top: `${line.top}px`,
                   width: `${line.width}%`,
@@ -109,7 +140,7 @@ const HomePage = () => {
             return (
               <span
                 key={i}
-                className="absolute w-[1px] bg-cyan-400"
+                className="absolute w-[1px] bg-white"
                 style={{
                   left: `${line.left}px`,
                   height: `${line.height}%`,
@@ -123,7 +154,7 @@ const HomePage = () => {
           return (
             <span
               key={i}
-              className="absolute h-[1px] bg-cyan-400 origin-left"
+              className="absolute h-[1px] bg-white origin-left"
               style={{
                 top: `${line.top}px`,
                 left: `${line.left}px`,
@@ -136,25 +167,28 @@ const HomePage = () => {
         })}
         </div>
       </div>
+      </div>
+
+      {/* CARDNEST KYC TITLE */}
+      <div className="text-center mb-6">
+        <h1 className="text-white text-3xl md:text-5xl font-bold">
+          CardNest <span className="text-red-200">KYC</span>
+        </h1>
+      </div>
 
       {/* TEXT */}
-      <h1 className="text-white text-5xl mt-4">
-        ID  <span className="text-cyan-300">Verify</span>
-      </h1>
-
-      <p className="text-gray-100 text-center mt-2 px-4 max-w-xl">
-        This is a simple KYC app that uses facial recognition technology to verify your identity.
-        Please follow the instructions to complete the process. Here we demonstrate a seamless
-        and secure way to authenticate users.
+      <p className="text-white text-center mt-2 px-4 max-w-2xl text-base md:text-lg leading-relaxed">
+        Welcome to CardNest KYC Verification - Your cooperation in this verification process helps us maintain a secure environment and deliver reliable services, and safeguard our customers' information.
       </p>
 
       {/* BUTTON */}
       <button
         onClick={handleGetStarted}
-        className="bg-gradient-to-r from-cyan-400 to-cyan-600
-                   text-xl text-white mt-4 px-24 py-4 rounded
-                   hover:from-cyan-500 hover:to-cyan-700
-                   transition-all duration-300"
+        className="bg-gradient-to-r from-red-600 to-red-800
+                   text-lg md:text-xl text-white mt-8 px-12 md:px-24 py-3 md:py-4 rounded-lg
+                   hover:from-red-700 hover:to-red-900
+                   transition-all duration-300 shadow-lg
+                   border border-red-500 hover:border-red-400"
       >
         Get Started
       </button>

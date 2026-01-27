@@ -51,47 +51,47 @@ const CameraModal = ({ open, sideLabel, onClose, onCapture }) => {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col bg-white">
-      <div className="flex items-start justify-between p-4">
+    <div className="fixed inset-0 z-50 flex flex-col" style={{backgroundColor: '#3f0000'}}>
+      <div className="flex items-start justify-between p-3 sm:p-4">
         <button
           type="button"
           onClick={onClose}
-          className="text-md font-semibold text-gray-700 transition hover:text-gray-600"
+          className="text-sm sm:text-md font-semibold text-white transition hover:text-red-200"
         >
           Close
         </button>
       </div>
 
-      <div className="flex flex-1 flex-col mx-auto items-center  px-4">
-        <div className="mb-4 text-center  mt-10">
-          <h2 className="text-3xl font-semibold text-gray-900">
+      <div className="flex flex-1 flex-col mx-auto items-center px-3 sm:px-4">
+        <div className="mb-3 sm:mb-4 text-center mt-4 sm:mt-10">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-white">
             Take Photo of Your ID
           </h2>
-          <p className="text-gray-600">
+          <p className="text-red-100 text-sm sm:text-base mt-1 sm:mt-2 px-2">
             Keep your ID steady and ensure all details are visible. Please wait
             for the camera to adjust.
           </p>
         </div>
 
-        <div className="w-full max-w-2xl overflow-hidden rounded-xl border border-gray-200 bg-gray-50 relative">
+        <div className="w-full max-w-2xl overflow-hidden rounded-xl border border-red-600 bg-red-900/20 relative">
           <video
             ref={videoRef}
             autoPlay
             playsInline
-            className="h-96 w-full object-cover"
+            className="h-64 sm:h-80 md:h-96 w-full object-cover"
           />
 
           {/* Transparent ID card placeholder overlay */}
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="relative w-4/5 h-3/5">
               {/* Dark overlay around the ID area */}
-              <div className="absolute inset-0 border-4 border-dashed border-cyan-500 rounded-lg bg-transparent opacity-80"></div>
+              <div className="absolute inset-0 border-4 border-dashed border-white rounded-lg bg-transparent opacity-80"></div>
 
               {/* Corner markers */}
-              <div className="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-cyan-400 rounded-tl-lg"></div>
-              <div className="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-cyan-400 rounded-tr-lg"></div>
-              <div className="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-cyan-400 rounded-bl-lg"></div>
-              <div className="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-cyan-400 rounded-br-lg"></div>
+              <div className="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-white rounded-tl-lg"></div>
+              <div className="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-white rounded-tr-lg"></div>
+              <div className="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-white rounded-bl-lg"></div>
+              <div className="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-white rounded-br-lg"></div>
             </div>
           </div>
         </div>
@@ -101,7 +101,7 @@ const CameraModal = ({ open, sideLabel, onClose, onCapture }) => {
         <button
           type="button"
           onClick={handleCapture}
-          className="w-full rounded-xl bg-cyan-500 px-4 py-3 text-lg font-semibold text-white transition hover:bg-cyan-600"
+          className="w-full rounded-xl bg-red-600 px-4 py-3 text-lg font-semibold text-white transition hover:bg-red-700"
         >
           Capture &amp; confirm
         </button>
@@ -120,17 +120,17 @@ const PlaceholderCard = ({
   const displaySrc = image || placeholderSrc;
 
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-dashed border-gray-300 bg-gray-50">
+    <div className="relative overflow-hidden rounded-2xl border border-dashed border-red-400 bg-red-900/20">
       <img
         src={displaySrc}
         alt={`${label} preview`}
-        className="h-48 w-full object-cover"
+        className={`h-56 w-full object-cover ${isCaptured ? 'scale-125' : ''}`}
       />
 
       <button
         type="button"
         onClick={onClick}
-        className="absolute bottom-3 right-3 inline-flex h-15 w-15 items-center justify-center rounded-full bg-cyan-500 shadow-lg transition hover:bg-cyan-600 hover:shadow-xl"
+        className="absolute bottom-3 right-3 inline-flex h-15 w-15 items-center justify-center rounded-full bg-red-600 shadow-lg transition hover:bg-red-700 hover:shadow-xl"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -245,7 +245,7 @@ const DocumentVerificationPage = () => {
       // Selfie will be captured in the liveness check later
       formData.append("selfie", new Blob([]), "");
 
-      const response = await fetch("https://api.cardnest.io/kyc/verify", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/kyc/verify`, {
         method: "POST",
         body: formData,
       });
@@ -256,6 +256,11 @@ const DocumentVerificationPage = () => {
       }
 
       const data = await response.json();
+      
+      // Log full API response for debugging
+      // console.log('=== VERIFY API FULL RESPONSE ===' );
+      // console.log(JSON.stringify(data, null, 2));
+      // console.log('================================');
 
       // Cache document verification result
       const docStatus = (data?.status || "").toString();
@@ -292,11 +297,11 @@ const DocumentVerificationPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white px-4 py-4 text-black">
+    <div className="min-h-screen px-4 py-4 text-white" style={{backgroundColor: '#3f0000'}}>
       <button
         type="button"
         onClick={() => router.back()}
-        className="mb-6 inline-flex items-center gap-2 text-lg font-semibold text-black transition hover:text-gray-600"
+        className="mb-6 inline-flex items-center gap-2 text-lg font-semibold text-white transition hover:text-red-200"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -313,7 +318,7 @@ const DocumentVerificationPage = () => {
       <div className="mx-auto max-w-3xl">
         <div className="mb-10 space-y-3 flex flex-col justify-center items-center text-center">
           <h1 className="text-3xl font-bold">Take your photo ID</h1>
-          <p className="text-gray-700">
+          <p className="text-red-100">
             {documentType === "passport"
               ? "Capture a clear photo of your passport (front page only)."
               : `Capture clear photos of both sides of your ${documentType === "license" ? "driver license" : "national ID"}.`}
@@ -351,10 +356,10 @@ const DocumentVerificationPage = () => {
           type="button"
           disabled={!readyToUpload || isUploading}
           onClick={handleUpload}
-          className={` w-full rounded-xl px-4 py-4 mt-30 text-lg font-semibold text-white transition ${
+          className={` w-full rounded-xl px-4 py-4 mt-25 text-lg font-semibold text-white transition ${
             readyToUpload && !isUploading
-              ? "bg-cyan-500 hover:bg-cyan-600"
-              : "bg-cyan-400 cursor-not-allowed"
+              ? "bg-red-600 hover:bg-red-700"
+              : "bg-red-400 cursor-not-allowed"
           }`}
         >
           {isUploading ? "Uploading..." : "Upload documents"}
