@@ -101,7 +101,7 @@ const CameraModal = ({ open, sideLabel, onClose, onCapture }) => {
         <button
           type="button"
           onClick={handleCapture}
-          className="w-full rounded-xl bg-red-600 px-4 py-3 text-lg font-semibold text-white transition hover:bg-red-700"
+          className="w-full rounded-xl bg-black px-4 py-3 text-lg font-semibold text-white transition hover:bg-gray-900 border border-gray-600"
         >
           Capture &amp; confirm
         </button>
@@ -120,7 +120,7 @@ const PlaceholderCard = ({
   const displaySrc = image || placeholderSrc;
 
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-dashed border-red-400 bg-red-900/20">
+    <div className="relative overflow-hidden rounded-2xl border-2 border-gray-600 bg-black">
       <img
         src={displaySrc}
         alt={`${label} preview`}
@@ -130,7 +130,7 @@ const PlaceholderCard = ({
       <button
         type="button"
         onClick={onClick}
-        className="absolute bottom-3 right-3 inline-flex h-15 w-15 items-center justify-center rounded-full bg-red-600 shadow-lg transition hover:bg-red-700 hover:shadow-xl"
+        className="absolute bottom-3 right-3 inline-flex h-15 w-15 items-center justify-center rounded-full bg-black shadow-lg transition hover:bg-gray-900 hover:shadow-xl border border-gray-600"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -358,8 +358,8 @@ const DocumentVerificationPage = () => {
           onClick={handleUpload}
           className={` w-full rounded-xl px-4 py-4 mt-25 text-lg font-semibold text-white transition ${
             readyToUpload && !isUploading
-              ? "bg-red-600 hover:bg-red-700"
-              : "bg-red-400 cursor-not-allowed"
+              ? "bg-black hover:bg-gray-900 border border-gray-600"
+              : "bg-gray-700 cursor-not-allowed border border-gray-600"
           }`}
         >
           {isUploading ? "Uploading..." : "Upload documents"}

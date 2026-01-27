@@ -88,10 +88,10 @@ const DocumentTypePage = () => {
               <button
                 key={docType.id}
                 onClick={() => handleSelectDocument(docType.id)}
-                className="w-full flex items-center justify-between rounded-xl bg-red-900/30 p-5 transition-all hover:bg-red-800/40 hover:shadow-lg hover:shadow-red-500/20 border border-red-700/50 hover:border-red-500/70 group"
+                className="w-full flex items-center justify-between rounded-xl bg-black p-5 transition-all hover:bg-gray-900 hover:shadow-lg hover:shadow-black/30 border border-gray-700 hover:border-gray-500 group"
               >
                 <div className="flex items-center gap-4">
-                    <div className="rounded-lg bg-red-500/20 p-3">
+                    <div className="rounded-lg bg-gray-800 p-3">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-6 w-6 text-white"
@@ -114,7 +114,7 @@ const DocumentTypePage = () => {
                     <p className="text-sm text-red-100">{docType.description}</p>
                   </div>
                 </div>
-                <div className="flex items-center justify-center w-10 h-10 rounded-full bg-red-500/20 group-hover:bg-red-500/30 transition-colors">
+                <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-800 group-hover:bg-gray-700 transition-colors">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-6 w-6 text-white"

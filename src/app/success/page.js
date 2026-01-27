@@ -97,7 +97,7 @@ const SuccessPage = () => {
     const upperStatus = status.toUpperCase();
     return upperStatus === 'PASS' || upperStatus === 'ACCEPT';
   }, [status]);
-  const badgeColor = isPass ? 'bg-red-600' : 'bg-red-800';
+  const badgeColor = isPass ? 'bg-black' : 'bg-gray-900';
   const accentColor = isPass ? 'text-red-200' : 'text-red-400';
   const borderColor = isPass ? 'border-red-400' : 'border-red-600';
   const helperText = isPass 
@@ -222,7 +222,7 @@ const SuccessPage = () => {
       </p>
       <button 
         onClick={handlePrimary}
-        className={`${badgeColor} text-white mt-6 px-8 py-3 rounded-lg hover:opacity-90 transition-colors w-full max-w-xs`}
+        className={`${badgeColor} text-white mt-6 px-8 py-3 rounded-lg hover:bg-gray-800 transition-colors w-full max-w-xs border border-gray-600`}
       >
         {primaryLabel}
       </button>

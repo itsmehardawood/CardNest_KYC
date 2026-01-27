@@ -368,7 +368,7 @@ const ScanningPage = () => {
             {/* Start Button */}
             <button
               onClick={handleStartCheck}
-              className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-4 px-6 rounded-xl transition-all transform hover:scale-105 shadow-lg hover:shadow-red-500/50"
+              className="w-full bg-black hover:bg-gray-900 text-white font-semibold py-4 px-6 rounded-xl transition-all transform hover:scale-105 shadow-lg hover:shadow-black/50 border border-gray-700"
             >
               Start Face Verification
             </button>
@@ -412,11 +412,11 @@ const ScanningPage = () => {
               </>
             ) : (
               <>
-                <div className="animate-spin rounded-full h-16 w-16 border-4 border-cyan-500 border-t-transparent mx-auto mb-4"></div>
+                <div className="animate-spin rounded-full h-16 w-16 border-4 border-white border-t-transparent mx-auto mb-4"></div>
                 <h2 className="text-2xl font-bold text-white mb-2">
                   Processing...
                 </h2>
-                <p className="text-gray-400">
+                <p className="text-gray-300">
                   Verifying your liveness
                 </p>
               </>
@@ -425,7 +425,7 @@ const ScanningPage = () => {
 
           {/* Video with face oval - use same video element for smooth continuous stream */}
           <div className="relative w-80 h-96 mb-8">
-            <div className="w-full h-full object-cover rounded-2xl border-2 border-slate-700 overflow-hidden bg-black">
+            <div className="w-full h-full object-cover rounded-2xl border-4 border-black overflow-hidden bg-black">
               <video
                 ref={videoRef}
                 autoPlay
@@ -438,11 +438,11 @@ const ScanningPage = () => {
             {/* Face oval overlay */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
               <div
-                className="border-4 border-cyan-500 border-dotted"
+                className="border-4 border-white border-dotted"
                 style={{
                   width: '65%',
                   height: '70%',
-                  backgroundColor: 'rgba(6, 182, 212, 0.1)',
+                  backgroundColor: 'rgba(0, 0, 0, 0.3)',
                   borderRadius: '50% 50% 45% 45% / 40% 40% 60% 60%',
                   transition: 'all 0.3s ease',
                 }}
@@ -452,13 +452,13 @@ const ScanningPage = () => {
 
           {/* Progress Bar */}
           <div className="w-80">
-            <div className="w-full bg-slate-700 rounded-full h-3 overflow-hidden mb-2">
+            <div className="w-full bg-black rounded-full h-3 overflow-hidden mb-2 border border-gray-700">
               <div
-                className="bg-gradient-to-r from-cyan-500 to-cyan-400 h-3 rounded-full transition-all duration-1000 ease-linear"
+                className="bg-gradient-to-r from-white to-gray-300 h-3 rounded-full transition-all duration-1000 ease-linear"
                 style={{ width: `${progress}%` }}
               ></div>
             </div>
-            <p className="text-center text-gray-400 text-sm">
+            <p className="text-center text-gray-300 text-sm">
               {isProcessing ? 'Analyzing...' : `${Math.round(progress)}% Complete`}
             </p>
           </div>
