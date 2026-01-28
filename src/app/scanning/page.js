@@ -1189,6 +1189,7 @@ const ScanningPage = () => {
                 playsInline
                 muted
                 className="w-full h-full object-cover"
+                style={{ transform: 'scaleX(-1)' }}
               ></video>
             </div>
 
