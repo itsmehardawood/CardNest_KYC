@@ -51,12 +51,12 @@ const CameraModal = ({ open, sideLabel, onClose, onCapture }) => {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col" style={{backgroundColor: '#3f0000'}}>
+    <div className="fixed inset-0 z-50 flex flex-col bg-black">
       <div className="flex items-start justify-between p-3 sm:p-4">
         <button
           type="button"
           onClick={onClose}
-          className="text-sm sm:text-md font-semibold text-white transition hover:text-red-200"
+          className="text-sm sm:text-md font-semibold text-white transition hover:text-red-400"
         >
           Close
         </button>
@@ -67,13 +67,13 @@ const CameraModal = ({ open, sideLabel, onClose, onCapture }) => {
           <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-white">
             Take Photo of Your ID
           </h2>
-          <p className="text-red-100 text-sm sm:text-base mt-1 sm:mt-2 px-2">
+          <p className="text-gray-300 text-sm sm:text-base mt-1 sm:mt-2 px-2">
             Keep your ID steady and ensure all details are visible. Please wait
             for the camera to adjust.
           </p>
         </div>
 
-        <div className="w-full max-w-2xl overflow-hidden rounded-xl border border-red-600 bg-red-900/20 relative">
+        <div className="w-full max-w-2xl overflow-hidden rounded-xl border border-red-900 bg-gray-900/20 relative">
           <video
             ref={videoRef}
             autoPlay
@@ -101,7 +101,7 @@ const CameraModal = ({ open, sideLabel, onClose, onCapture }) => {
         <button
           type="button"
           onClick={handleCapture}
-          className="w-full rounded-xl bg-black px-4 py-3 text-lg font-semibold text-white transition hover:bg-gray-900 border border-gray-600"
+          className="w-full rounded-xl bg-red-900 px-4 py-3 text-lg font-semibold text-white transition hover:bg-red-800 border border-red-700"
         >
           Capture &amp; confirm
         </button>
@@ -120,7 +120,7 @@ const PlaceholderCard = ({
   const displaySrc = image || placeholderSrc;
 
   return (
-    <div className="relative overflow-hidden rounded-2xl border-2 border-gray-600 bg-black">
+    <div className="relative overflow-hidden rounded-2xl border-2 border-gray-700 bg-gray-900">
       <img
         src={displaySrc}
         alt={`${label} preview`}
@@ -130,7 +130,7 @@ const PlaceholderCard = ({
       <button
         type="button"
         onClick={onClick}
-        className="absolute bottom-3 right-3 inline-flex h-15 w-15 items-center justify-center rounded-full bg-black shadow-lg transition hover:bg-gray-900 hover:shadow-xl border border-gray-600"
+        className="absolute bottom-3 right-3 inline-flex h-15 w-15 items-center justify-center rounded-full bg-red-900 shadow-lg transition hover:bg-red-800 hover:shadow-xl border border-red-700"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -297,11 +297,11 @@ const DocumentVerificationPage = () => {
   }
 
   return (
-    <div className="min-h-screen px-4 py-4 text-white" style={{backgroundColor: '#3f0000'}}>
+    <div className="min-h-screen px-4 py-4 text-white bg-black">
       <button
         type="button"
         onClick={() => router.back()}
-        className="mb-6 inline-flex items-center gap-2 text-lg font-semibold text-white transition hover:text-red-200"
+        className="mb-6 inline-flex items-center gap-2 text-lg font-semibold text-white transition hover:text-red-400"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -318,7 +318,7 @@ const DocumentVerificationPage = () => {
       <div className="mx-auto max-w-3xl">
         <div className="mb-10 space-y-3 flex flex-col justify-center items-center text-center">
           <h1 className="text-3xl font-bold">Take your photo ID</h1>
-          <p className="text-red-100">
+          <p className="text-gray-300">
             {documentType === "passport"
               ? "Capture a clear photo of your passport (front page only)."
               : `Capture clear photos of both sides of your ${documentType === "license" ? "driver license" : "national ID"}.`}
@@ -358,8 +358,8 @@ const DocumentVerificationPage = () => {
           onClick={handleUpload}
           className={` w-full rounded-xl px-4 py-4 mt-25 text-lg font-semibold text-white transition ${
             readyToUpload && !isUploading
-              ? "bg-black hover:bg-gray-900 border border-gray-600"
-              : "bg-gray-700 cursor-not-allowed border border-gray-600"
+              ? "bg-red-900 hover:bg-red-800 border border-red-700"
+              : "bg-gray-800 cursor-not-allowed border border-gray-700"
           }`}
         >
           {isUploading ? "Uploading..." : "Upload documents"}

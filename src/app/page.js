@@ -52,7 +52,7 @@ const HomePage = () => {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-around py-20 h-screen" style={{backgroundColor: '#3f0000'}}>
+    <div className="flex flex-col items-center justify-around py-20 h-screen bg-black">
 
       {/* KYC VERIFICATION VISUALS */}
       <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12 mb-8">
@@ -172,7 +172,7 @@ const HomePage = () => {
       {/* CARDNEST KYC TITLE */}
       <div className="text-center mb-6">
         <h1 className="text-white text-3xl md:text-5xl font-bold">
-          CardNest <span className="text-red-200">KYC</span>
+          CardNest <span className="text-red-700">KYC</span>
         </h1>
       </div>
 
@@ -184,11 +184,11 @@ const HomePage = () => {
       {/* BUTTON */}
       <button
         onClick={handleGetStarted}
-        className="bg-black
+        className="bg-red-900
                    text-lg md:text-xl text-white mt-8 px-12 md:px-24 py-3 md:py-4 rounded-lg
-                   hover:bg-gray-900
+                   hover:bg-red-800
                    transition-all duration-300 shadow-lg
-                   border border-gray-600 hover:border-gray-500"
+                   border border-red-700 hover:border-red-600"
       >
         Get Started
       </button>

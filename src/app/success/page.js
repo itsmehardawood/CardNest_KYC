@@ -97,19 +97,20 @@ const SuccessPage = () => {
     const upperStatus = status.toUpperCase();
     return upperStatus === 'PASS' || upperStatus === 'ACCEPT';
   }, [status]);
-  const badgeColor = isPass ? 'bg-black' : 'bg-gray-900';
-  const accentColor = isPass ? 'text-red-200' : 'text-red-400';
-  const borderColor = isPass ? 'border-red-400' : 'border-red-600';
+  const badgeColor = isPass ? 'bg-red-900' : 'bg-gray-800';
+  const accentColor = isPass ? 'text-white' : 'text-red-400';
+  const borderColor = isPass ? 'border-red-700' : 'border-red-600';
+  const statusText = isPass ? 'Successful' : 'Failed';
   const helperText = isPass 
-    ? (verificationStage === 'document' ? 'Document Verification Successful' : 'ID Confirmation, You May Enter') 
-    : (verificationStage === 'liveness' ? 'Facial Verification Failed. Please retry facial verification only.' : 'Document Verification Failed. Please retry.');
-  const titleText = isPass ? 'Successful!' : 'Verification Failed';
+    ? (verificationStage === 'document' ? 'Document verified successfully' : 'Identity confirmed') 
+    : 'Please retry your verification';
+  const titleText = 'Scan Complete';
   const primaryLabel = isPass 
     ? (verificationStage === 'document' ? 'Proceed to Face Verification' : 'Finish') 
-    : (verificationStage === 'liveness' ? 'Retake Face Scan' : 'Retake Documents');
+    : (verificationStage === 'liveness' ? 'Retry Face Scan' : 'Retry Documents');
 
   return (
-    <div className="flex flex-col items-center min-h-screen px-4 py-8 overflow-y-auto" style={{backgroundColor: '#3f0000'}}>
+    <div className="flex flex-col items-center min-h-screen px-4 py-8 overflow-y-auto bg-black">
       <div className={`w-12 h-12 mt-10 rounded-full ${badgeColor} flex items-center justify-center flex-shrink-0`}>
         <svg
           className="w-10 h-10 text-white" 
@@ -126,11 +127,12 @@ const SuccessPage = () => {
         </svg>
       </div>
       <h1 className={`${accentColor} text-3xl mt-4 text-center`}>{titleText}</h1>
-      <p className="text-red-100 mt-2 text-base md:text-lg mb-8 text-center px-4">{helperText}</p>
+  
+      <p className="text-gray-300 mt-3 text-base md:text-lg mb-8 text-center px-4">{helperText}</p>
 
       {/* Display liveness face image ONLY for liveness stage */}
       {verificationStage === 'liveness' && faceImage && (
-        <div className={`w-48 h-48 md:w-56 md:h-56 rounded-full border-4 ${borderColor} bg-red-900/30 flex items-center justify-center mt-2 mb-6 overflow-hidden flex-shrink-0 shadow-xl`}>
+        <div className={`w-48 h-48 md:w-56 md:h-56 rounded-full border-4 ${borderColor} bg-gray-900/30 flex items-center justify-center mt-2 mb-6 overflow-hidden flex-shrink-0 shadow-xl`}>
           <img
             src={faceImage}
             alt="Liveness selfie"
@@ -158,9 +160,9 @@ const SuccessPage = () => {
           {/* Document images in grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 px-2">
             {kycImages.front && (
-              <div className="bg-red-900/30 rounded-xl overflow-hidden shadow-lg border border-red-700/50 transition hover:shadow-2xl">
-                <div className="bg-red-800/50 px-4 py-2 border-b border-red-600/50">
-                  <p className="text-red-200 text-sm font-semibold">ID Front</p>
+              <div className="bg-gray-900/50 rounded-xl overflow-hidden shadow-lg border border-gray-700 transition hover:shadow-2xl">
+                <div className="bg-gray-800 px-4 py-2 border-b border-gray-700">
+                  <p className="text-gray-300 text-sm font-semibold">ID Front</p>
                 </div>
                 <div className="p-2 overflow-hidden rounded-lg">
                   <img 
@@ -172,9 +174,9 @@ const SuccessPage = () => {
               </div>
             )}
             {kycImages.back && (
-              <div className="bg-red-900/30 rounded-xl overflow-hidden shadow-lg border border-red-700/50 transition hover:shadow-2xl">
-                <div className="bg-red-800/50 px-4 py-2 border-b border-red-600/50">
-                  <p className="text-red-200 text-sm font-semibold">ID Back</p>
+              <div className="bg-gray-900/50 rounded-xl overflow-hidden shadow-lg border border-gray-700 transition hover:shadow-2xl">
+                <div className="bg-gray-800 px-4 py-2 border-b border-gray-700">
+                  <p className="text-gray-300 text-sm font-semibold">ID Back</p>
                 </div>
                 <div className="p-2 overflow-hidden rounded-lg">
                   <img 
@@ -190,39 +192,27 @@ const SuccessPage = () => {
       )}
 
       <div className="mt-6 flex flex-col items-center space-y-2 text-center">
-        <p className={`${accentColor} text-3xl md:text-4xl font-semibold`}>Scan Complete</p>
-        {/* <p className={`${accentColor} text-sm md:text-lg`}>Profile ID: <span className='text-gray-200'>{profileId || 'N/A'}</span></p> */}
-        {/* <p className={`${accentColor} text-sm md:text-lg`}>Employee ID: <span className='text-gray-200'>{userId || 'N/A'}</span></p> */}
-        {/* Only show status for liveness stage, not for document verification */}
         {verificationStage === 'liveness' && (
-          <p className={`${accentColor} text-sm md:text-lg`}> </p>
+          <p className="text-gray-300 text-xl">Face verification {isPass ? 'passed' : 'needs retry'}</p>
+        )}
+        {verificationStage === 'document' && (
+          <p className="text-gray-300 text-xl">Document can {isPass ? 'passed' : 'needs retry'}</p>
+        )}
+        {!isPass && (
+          <div className="mt-3 px-6 py-2 rounded-full bg-red-600">
+            <p className="text-white text-lg font-semibold">Status: {statusText}</p>
+          </div>
         )}
       </div>
 
-      {/* Display stage-specific warnings if verification failed */}
-      {(verificationStage === 'document' || verificationStage === 'liveness') && !isPass && kycWarnings.length > 0 && (
-        <div className="mt-8 w-full max-w-md bg-red-900/40 border border-red-600/60 rounded-lg p-4">
-          <p className="text-red-200 font-semibold mb-2">
-            {verificationStage === 'liveness' ? 'Face Verification Issues:' : 'Document Verification Issues:'}
-          </p>
-          <ul className="text-red-100 text-sm space-y-1">
-            {kycWarnings.map((warning, idx) => (
-              <li key={idx} className="list-disc list-inside">
-                {warning.description || warning.code || warning.message || warning}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      <p className="text-red-100 text-lg md:text-xl mt-10 text-center">
+      <p className="text-gray-300 text-lg md:text-xl mt-10 text-center">
         {isPass 
-          ? (verificationStage === 'document' ? 'Next step: Face verification for liveness check.' : 'Thank you and have a good day!') 
-          : (verificationStage === 'liveness' ? 'Please retake your liveness check.' : 'Please retake your documents.')}
+          ? (verificationStage === 'document' ? 'Next Step: We will need to recognize and verify your face in real-time against your document we processed.' : 'Thank you!') 
+          : 'Please try again'}
       </p>
       <button 
         onClick={handlePrimary}
-        className={`${badgeColor} text-white mt-6 px-8 py-3 rounded-lg hover:bg-gray-800 transition-colors w-full max-w-xs border border-gray-600`}
+        className="bg-red-900 text-white mt-6 px-8 py-3 rounded-lg hover:bg-red-800 transition-colors w-full max-w-xs border border-red-700"
       >
         {primaryLabel}
       </button>

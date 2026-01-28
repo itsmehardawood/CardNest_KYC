@@ -28,7 +28,7 @@ const DocumentTypePage = () => {
   };
 
   return (
-    <div className="flex min-h-screen flex-col" style={{backgroundColor: '#3f0000'}}>
+    <div className="flex min-h-screen flex-col bg-black">
       {/* Header */}
       <div className="p-6">
         <button
@@ -57,7 +57,7 @@ const DocumentTypePage = () => {
           {/* Title Section */}
           <div className="text-center">
             <div className="mb-6 flex justify-center">
-              <div className="rounded-full bg-red-500/20 p-4">
+              <div className="rounded-full bg-red-900/40 p-4">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-12 w-12 text-white"
@@ -77,7 +77,7 @@ const DocumentTypePage = () => {
             <h1 className="text-3xl font-bold text-white mb-3">
               Select ID Document Type
             </h1>
-            <p className="text-red-100 text-lg">
+            <p className="text-gray-300 text-lg">
               Choose the type of identification document you want to verify
             </p>
           </div>
@@ -88,7 +88,7 @@ const DocumentTypePage = () => {
               <button
                 key={docType.id}
                 onClick={() => handleSelectDocument(docType.id)}
-                className="w-full flex items-center justify-between rounded-xl bg-black p-5 transition-all hover:bg-gray-900 hover:shadow-lg hover:shadow-black/30 border border-gray-700 hover:border-gray-500 group"
+                className="w-full flex items-center justify-between rounded-xl bg-gray-900 p-5 transition-all hover:bg-red-900/30 hover:shadow-lg hover:shadow-red-900/30 border border-gray-700 hover:border-red-700 group"
               >
                 <div className="flex items-center gap-4">
                     <div className="rounded-lg bg-gray-800 p-3">
@@ -111,7 +111,7 @@ const DocumentTypePage = () => {
                     <h3 className="text-lg font-semibold text-white">
                       {docType.label}
                     </h3>
-                    <p className="text-sm text-red-100">{docType.description}</p>
+                    <p className="text-sm text-gray-400">{docType.description}</p>
                   </div>
                 </div>
                 <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-800 group-hover:bg-gray-700 transition-colors">
@@ -135,11 +135,11 @@ const DocumentTypePage = () => {
           </div>
 
           {/* Info Note */}
-          <div className="rounded-lg bg-red-500/10 border border-red-500/30 p-4">
+          <div className="rounded-lg bg-red-900/20 border border-red-900/50 p-4">
             <div className="flex gap-3">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 text-red-200 flex-shrink-0 mt-0.5"
+                className="h-5 w-5 text-red-500 flex-shrink-0 mt-0.5"
                 viewBox="0 0 20 20"
                 fill="currentColor"
               >
@@ -149,7 +149,7 @@ const DocumentTypePage = () => {
                   clipRule="evenodd"
                 />
               </svg>
-              <p className="text-sm text-red-100">
+              <p className="text-sm text-gray-300">
                 Make sure your document is valid and not expired. You'll need to
                 capture clear photos in the next step.
               </p>
