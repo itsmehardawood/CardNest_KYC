@@ -83,7 +83,7 @@ const CameraModal = ({ open, sideLabel, onClose, onCapture }) => {
 
           {/* Transparent ID card placeholder overlay */}
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="relative w-4/5 h-3/5">
+            <div className="relative w-4/5 h-3/4">
               {/* Dark overlay around the ID area */}
               <div className="absolute inset-0 border-4 border-dashed border-white rounded-lg bg-transparent opacity-80"></div>
 
