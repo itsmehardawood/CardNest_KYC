@@ -193,7 +193,9 @@ const SuccessPage = () => {
 
       <div className="mt-6 flex flex-col items-center space-y-2 text-center">
         {verificationStage === 'liveness' && (
-          <p className="text-gray-300 text-xl">Face verification {isPass ? 'passed' : 'needs retry'}</p>
+          <div className={isPass ? "border-4 border-green-600 rounded-lg p-4 bg-green-950/30" : ""}>
+            <p className="text-gray-100 text-lg">{isPass ? 'Congratulations we have successfully confirmed, matched, and verified your face against our intelligence system' : 'Face verification needs retry'}</p>
+          </div>
         )}
         {verificationStage === 'document' && (
           <p className="text-gray-300 text-xl">Document can {isPass ? 'passed' : 'needs retry'}</p>
@@ -204,6 +206,9 @@ const SuccessPage = () => {
           </div>
         )}
       </div>
+
+
+    
 
       <p className="text-gray-300 text-lg md:text-xl mt-10 text-center">
         {isPass 
