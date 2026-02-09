@@ -170,10 +170,10 @@ function NavbarHomepage() {
               </button>
               {/* Full Width Dropdown */}
               <div
-                className="fixed left-0 right-0 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50"
-                style={{ top: isScrolled ? "86px" : "80px" }}
+                className="fixed left-0 right-0 xl:px-30 lg:px-15 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50"
+                style={{ top: isScrolled ? "86px" : "70px" }}
               >
-                <div className="mx-[5px]">
+                <div className="mx-[20px]  ">
                   <div className="bg-white/95 shadow-lg rounded-b-xl h-[240px] flex items-center justify-between gap-8 px-8">
                     {/* Left side heading */}
                     <div className="flex-shrink-0 pl-8">
@@ -186,7 +186,7 @@ function NavbarHomepage() {
                     </div>
 
                     {/* Right side menu items */}
-                    <div className="flex items-center gap-8">
+                    <div className="flex items-center gap-1">
                       <div className="group/item">
                         <button
                           onClick={() => scrollToSection("kyc")}
