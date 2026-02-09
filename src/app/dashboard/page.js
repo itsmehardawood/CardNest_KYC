@@ -13,6 +13,9 @@ import ScanHistorySection from "../components/Dashboard-Screens/Scanhistory/Scan
 import BillingLogsSection from "../components/Dashboard-Screens/BillingLogsSection/BillingLogsSection";
 import DisplaySettings from "../components/Dashboard-Screens/DisplaySettings";
 import SubBusinessesScreen from "../components/Dashboard-Screens/SubBusinessesScreen";
+import KYCDashboard from "../components/Dashboard-Screens/KYCDashboard";
+import FaceVerification from "../components/Dashboard-Screens/FaceVerification";
+import DocumentsVerifications from "../components/Dashboard-Screens/DocumentsVerifications";
 import useAutoLogout from "../hooks/Autologout";
 
 // Loading component for Suspense fallback
@@ -232,6 +235,10 @@ function DashboardContent() {
   const sidebarItems = [
     { id: "home", label: "Home" },
     { id: "profile", label: "Business Profile" },
+    { id: "kyc-dashboard", label: "KYC Dashboard" },
+    { id: "face-verification", label: "Face Verification" },
+    { id: "documents-verifications", label: "Documents Verifications" },
+    { id: "kyc-reports", label: "KYC Reports" },
     { id: "sub-businesses", label: "Sub Businesses" },
     { id: "balance", label: "Balance" },
     { id: "subscriptions", label: "Subscriptions" },
@@ -682,8 +689,18 @@ function DashboardContent() {
       case "displaysettings":
         return <DisplaySettings />;
 
-        case "sub-businesses":
-  return <SubBusinessesScreen />;
+      case "sub-businesses":
+        return <SubBusinessesScreen />;
+      
+      case "kyc-dashboard":
+        return <KYCDashboard />;
+      case "face-verification":
+        return <FaceVerification />;
+      case "documents-verifications":
+        return <DocumentsVerifications />;
+      case "kyc-reports":
+        return <div className="p-6 bg-black text-white"><h1 className="text-2xl font-bold">KYC Reports - Coming Soon</h1></div>;
+      
       case "developers":
         return <DevelopersScreen />;
 

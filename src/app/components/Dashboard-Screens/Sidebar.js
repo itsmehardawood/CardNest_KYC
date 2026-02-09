@@ -1,5 +1,3 @@
-
-
 'use client';
 
 import React, { useEffect, useState } from 'react';
@@ -16,11 +14,15 @@ import {
   Receipt,
   Settings,
   Building2,
+  ShieldCheck,
+  ChevronDown,
+  ChevronUp,
 } from 'lucide-react';
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen, activeTab, setActiveTab, status }) => {
   const [email, setEmail] = useState('');
   const [userRole, setUserRole] = useState('');
+  const [kycSubmenuOpen, setKycSubmenuOpen] = useState(false);
 
   useEffect(() => {
     const storedData = localStorage.getItem('userData');
@@ -41,6 +43,17 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, activeTab, setActiveTab, status 
   const baseSidebarItems = [
     { id: 'home', label: 'Home', icon: <Home className="w-5 h-5" /> },
     { id: 'profile', label: 'Business Profile', icon: <User className="w-5 h-5" /> },
+    { 
+      id: 'kyc', 
+      label: 'CardNest KYC', 
+      icon: <ShieldCheck className="w-5 h-5" />,
+      hasSubmenu: true,
+      submenu: [
+        { id: 'kyc-dashboard', label: 'KYC Dashboard' },
+        { id: 'face-verification', label: 'Face Verification' },
+        { id: 'documents-verifications', label: 'Documents Results' },
+      ]
+    },
     { id: 'subscriptions', label: 'Subscriptions', icon: <ClipboardList className="w-5 h-5" /> },
     { id: 'Card', label: 'Security Scan Settings', icon: <BadgeDollarSign className="w-5 h-5" /> },
     { id: 'scanshistory', label: 'Scan History', icon: <History className="w-5 h-5" /> },
@@ -92,26 +105,65 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, activeTab, setActiveTab, status 
       <div className="flex-1 overflow-y-auto py-4">
         <nav className={`${sidebarOpen ? 'px-4' : 'px-2'} space-y-1`}>
           {sidebarItems.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => setActiveTab(item.id)}
-              className={`group relative w-full flex items-center ${
-                sidebarOpen ? 'px-4 py-3' : 'px-2 py-3 justify-center'
-              } text-left rounded-lg transition-colors ${
-                activeTab === item.id
-                  ? 'bg-gray-800 border border-gray-600'
-                  : 'hover:bg-gray-800'
-              }`}
-              style={{color: activeTab === item.id ? '#e0aa3e' : '#e0aa3e'}}
-            >
-              {item.icon}
-              {sidebarOpen && <span className="ml-3 font-medium">{item.label}</span>}
-              {!sidebarOpen && (
-                <span className="absolute left-14 top-1/2 -translate-y-1/2 bg-gray-800 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition duration-200 whitespace-nowrap z-50">
-                  {item.label}
-                </span>
+            <div key={item.id}>
+              <button
+                onClick={() => {
+                  if (item.hasSubmenu) {
+                    setKycSubmenuOpen(!kycSubmenuOpen);
+                    if (!sidebarOpen) {
+                      setSidebarOpen(true);
+                    }
+                  } else {
+                    setActiveTab(item.id);
+                  }
+                }}
+                className={`group relative w-full flex items-center ${
+                  sidebarOpen ? 'px-4 py-3' : 'px-2 py-3 justify-center'
+                } text-left rounded-lg transition-colors ${
+                  activeTab === item.id || (item.hasSubmenu && item.submenu?.some(sub => activeTab === sub.id))
+                    ? 'bg-gray-800 border border-gray-600'
+                    : 'hover:bg-gray-800'
+                }`}
+                style={{color: activeTab === item.id || (item.hasSubmenu && item.submenu?.some(sub => activeTab === sub.id)) ? '#e0aa3e' : '#e0aa3e'}}
+              >
+                {item.icon}
+                {sidebarOpen && (
+                  <>
+                    <span className="ml-3 font-medium flex-1">{item.label}</span>
+                    {item.hasSubmenu && (
+                      kycSubmenuOpen ? 
+                        <ChevronUp className="w-4 h-4" /> : 
+                        <ChevronDown className="w-4 h-4" />
+                    )}
+                  </>
+                )}
+                {!sidebarOpen && (
+                  <span className="absolute left-14 top-1/2 -translate-y-1/2 bg-gray-800 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition duration-200 whitespace-nowrap z-50">
+                    {item.label}
+                  </span>
+                )}
+              </button>
+              
+              {/* Submenu */}
+              {item.hasSubmenu && kycSubmenuOpen && sidebarOpen && (
+                <div className="mt-1 ml-4 space-y-1">
+                  {item.submenu.map((subItem) => (
+                    <button
+                      key={subItem.id}
+                      onClick={() => setActiveTab(subItem.id)}
+                      className={`w-full flex items-center px-4 py-2 text-left rounded-lg transition-colors text-sm ${
+                        activeTab === subItem.id
+                          ? 'bg-gray-700 border border-gray-600'
+                          : 'hover:bg-gray-800'
+                      }`}
+                      style={{color: activeTab === subItem.id ? '#e0aa3e' : '#9ca3af'}}
+                    >
+                      <span className="ml-6">{subItem.label}</span>
+                    </button>
+                  ))}
+                </div>
               )}
-            </button>
+            </div>
           ))}
         </nav>
       </div>
