@@ -174,26 +174,26 @@ function NavbarHomepage() {
                 style={{ top: isScrolled ? "86px" : "70px" }}
               >
                 <div className="mx-[20px]  ">
-                  <div className="bg-white/95 shadow-lg rounded-b-xl h-[240px] flex items-center justify-between gap-8 px-8">
+                  <div className="bg-white/95 shadow-lg rounded-b-xl h-[160px] md:h-[170px] lg:h-[180px] xl:h-[190px] flex items-center justify-between gap-4 md:gap-6 lg:gap-8 px-4 md:px-6 lg:px-8">
                     {/* Left side heading */}
-                    <div className="flex-shrink-0 pl-8">
-                      <h3 className="text-2xl font-bold text-gray-800 mb-2">
+                    <div className="flex-shrink-0 pl-2 md:pl-4 lg:pl-8">
+                      <h3 className="text-lg md:text-xl lg:text-2xl font-bold text-gray-800 mb-1 md:mb-2">
                         Why CardNest?
                       </h3>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-xs md:text-sm text-gray-600">
                         Explore what makes us different
                       </p>
                     </div>
 
                     {/* Right side menu items */}
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-0.5 md:gap-1">
                       <div className="group/item">
                         <button
                           onClick={() => scrollToSection("kyc")}
-                          className="text-gray-800 hover:text-teal-600 transition-colors duration-200 font-semibold text-base px-6 py-2 rounded-lg block w-full text-left flex items-center gap-2"
+                          className="text-gray-800 hover:text-teal-600 transition-colors duration-200 font-semibold text-xs md:text-sm lg:text-base px-2 md:px-4 lg:px-6 py-1 md:py-1.5 lg:py-2 rounded-lg block w-full text-left flex items-center gap-1 md:gap-2"
                         >
                           <svg
-                            className="w-5 h-5 transition-transform duration-300 group-hover/item:scale-150 group-hover/item:rotate-12"
+                            className="w-3 h-3 md:w-4 md:h-4 lg:w-5 lg:h-5 transition-transform duration-300 group-hover/item:scale-150 group-hover/item:rotate-12 flex-shrink-0"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -207,17 +207,17 @@ function NavbarHomepage() {
                           </svg>
                           CardNest KYC
                         </button>
-                        <p className="text-xs text-gray-500 mt-1 pointer-events-none text-left px-6 ml-7">
+                        <p className="text-[10px] md:text-xs text-gray-500 mt-0.5 md:mt-1 pointer-events-none text-left px-2 md:px-4 lg:px-6 ml-4 md:ml-6 lg:ml-7">
                           Secure and reliable <br></br>identity verification
                         </p>
                       </div>
                       <div className="group/item">
                         <button
                           onClick={() => scrollToSection("benefits")}
-                          className="text-gray-800 hover:text-teal-600 transition-colors duration-200 font-semibold text-base px-6 py-2 rounded-lg block w-full text-left flex items-center gap-2"
+                          className="text-gray-800 hover:text-teal-600 transition-colors duration-200 font-semibold text-xs md:text-sm lg:text-base px-2 md:px-4 lg:px-6 py-1 md:py-1.5 lg:py-2 rounded-lg block w-full text-left flex items-center gap-1 md:gap-2"
                         >
                           <svg
-                            className="w-5 h-5 transition-transform duration-300 group-hover/item:scale-150 group-hover/item:-rotate-12"
+                            className="w-3 h-3 md:w-4 md:h-4 lg:w-5 lg:h-5 transition-transform duration-300 group-hover/item:scale-150 group-hover/item:-rotate-12 flex-shrink-0"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -231,17 +231,17 @@ function NavbarHomepage() {
                           </svg>
                           Benefits
                         </button>
-                        <p className="text-xs text-gray-500 mt-1 pointer-events-none text-left px-6 ml-7">
+                        <p className="text-[10px] md:text-xs text-gray-500 mt-0.5 md:mt-1 pointer-events-none text-left px-2 md:px-4 lg:px-6 ml-4 md:ml-6 lg:ml-7">
                           Reasons why you should <br></br>choose CardNest
                         </p>
                       </div>
                       <div className="group/item">
                         <button
                           onClick={() => scrollToSection("pricing")}
-                          className="text-gray-800 hover:text-teal-600 transition-colors duration-200 font-semibold text-base px-6 py-2 rounded-lg block w-full text-left flex items-center gap-2"
+                          className="text-gray-800 hover:text-teal-600 transition-colors duration-200 font-semibold text-xs md:text-sm lg:text-base px-2 md:px-4 lg:px-6 py-1 md:py-1.5 lg:py-2 rounded-lg block w-full text-left flex items-center gap-1 md:gap-2"
                         >
                           <svg
-                            className="w-5 h-5 transition-transform duration-300 group-hover/item:scale-150 group-hover/item:rotate-12"
+                            className="w-3 h-3 md:w-4 md:h-4 lg:w-5 lg:h-5 transition-transform duration-300 group-hover/item:scale-150 group-hover/item:rotate-12 flex-shrink-0"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -255,7 +255,7 @@ function NavbarHomepage() {
                           </svg>
                           Pricing
                         </button>
-                        <p className="text-xs text-gray-500 mt-1 pointer-events-none text-left px-6 ml-7">
+                        <p className="text-[10px] md:text-xs text-gray-500 mt-0.5 md:mt-1 pointer-events-none text-left px-2 md:px-4 lg:px-6 ml-4 md:ml-6 lg:ml-7">
                           Flexible subscription plans<br></br> suitable for
                           everyone
                         </p>
@@ -263,10 +263,10 @@ function NavbarHomepage() {
                       <div className="group/item">
                         <button
                           onClick={() => scrollToSection("features")}
-                          className="text-gray-800 hover:text-teal-600 transition-colors duration-200 font-semibold text-base px-6 py-2 rounded-lg block w-full text-left flex items-center gap-2"
+                          className="text-gray-800 hover:text-teal-600 transition-colors duration-200 font-semibold text-xs md:text-sm lg:text-base px-2 md:px-4 lg:px-6 py-1 md:py-1.5 lg:py-2 rounded-lg block w-full text-left flex items-center gap-1 md:gap-2"
                         >
                           <svg
-                            className="w-5 h-5 transition-transform duration-300 group-hover/item:scale-150 group-hover/item:-rotate-12"
+                            className="w-3 h-3 md:w-4 md:h-4 lg:w-5 lg:h-5 transition-transform duration-300 group-hover/item:scale-150 group-hover/item:-rotate-12 flex-shrink-0"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -280,15 +280,15 @@ function NavbarHomepage() {
                           </svg>
                           Features
                         </button>
-                        <p className="text-xs text-gray-500 mt-1 pointer-events-none text-left px-6 ml-7">
+                        <p className="text-[10px] md:text-xs text-gray-500 mt-0.5 md:mt-1 pointer-events-none text-left px-2 md:px-4 lg:px-6 ml-4 md:ml-6 lg:ml-7">
                           Explore our powerful<br></br> product features
                         </p>
                       </div>
                       <div className="group/item">
                         <div className="relative">
-                          <div className="flex items-center gap-2 px-6 py-2">
+                          <div className="flex items-center gap-1 md:gap-2 px-2 md:px-4 lg:px-6 py-1 md:py-1.5 lg:py-2">
                             <svg
-                              className="w-5 h-5 transition-transform duration-300 group-hover/item:scale-150 group-hover/item:rotate-12"
+                              className="w-3 h-3 md:w-4 md:h-4 lg:w-5 lg:h-5 transition-transform duration-300 group-hover/item:scale-150 group-hover/item:rotate-12 flex-shrink-0"
                               fill="none"
                               stroke="currentColor"
                               viewBox="0 0 24 24"
@@ -300,19 +300,19 @@ function NavbarHomepage() {
                                 d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                               />
                             </svg>
-                            <span className="text-gray-800 font-semibold text-base">
+                            <span className="text-gray-800 font-semibold text-xs md:text-sm lg:text-base">
                               Documents
                             </span>
                           </div>
-                          <p className="text-xs text-gray-500 pointer-events-none text-left px-6 ml-7 mb-2">
+                          <p className="text-[10px] md:text-xs text-gray-500 pointer-events-none text-left px-2 md:px-4 lg:px-6 ml-4 md:ml-6 lg:ml-7 mb-1 md:mb-2">
                             Legal & policy documents
                           </p>
-                          <div className="flex flex-col gap-1 px-6 ml-7">
+                          <div className="flex flex-col gap-0.5 md:gap-1 px-2 md:px-4 lg:px-6 ml-4 md:ml-6 lg:ml-7">
                             <a
                               href="https://d2puivvgaibigt.cloudfront.net/CardNest%20Privacy%20Policy.pdf"
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-xs text-gray-600 hover:text-teal-600 transition-colors duration-200 hover:underline"
+                              className="text-[10px] md:text-xs text-gray-600 hover:text-teal-600 transition-colors duration-200 hover:underline"
                             >
                               → Privacy Policy
                             </a>
@@ -320,7 +320,7 @@ function NavbarHomepage() {
                               href="https://d2puivvgaibigt.cloudfront.net/CardNest%20LLC%20Customer%20Terms%20&%20Agreement.pdf"
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-xs text-gray-600 hover:text-teal-600 transition-colors duration-200 hover:underline"
+                              className="text-[10px] md:text-xs text-gray-600 hover:text-teal-600 transition-colors duration-200 hover:underline"
                             >
                               → Terms & Agreement
                             </a>

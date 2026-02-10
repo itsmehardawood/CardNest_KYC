@@ -36,7 +36,7 @@ const LandingPage = () => {
             "Protect merchants, customers, and partners from card fraud and chargebacks",
             "Ensure only legitimate users access CardNest's fraud-prevention infrastructure"
           ],
-          footer: "Your cooperation helps us maintain a secure environment and deliver reliable fraud prevention services."
+          footer: ""
         },
         {
           emoji: "🧭",
@@ -406,7 +406,7 @@ footer: "",
       <section id="about" className="py-5 px-6 bg-gray-100 w-full">
         <div className="max-w-7xl mx-auto">
           <h2 className="font-bold text-3xl md:text-3xl mb-10 text-gray-900 text-center">
-           CardnNest Intelligence Scan
+           CardNest Intelligence Scan
           </h2>
 
           <div className="flex flex-col md:flex-row items-center md:items-start gap-10">
@@ -495,7 +495,7 @@ footer: "",
                 CardNest KYC Verification
               </h3>
             
-              <p className="text-sm sm:text-base text-gray-300 max-w-7xl mx-auto text-center">
+              <p className="text-sm sm:text-base text-gray-300 max-w-7xl text-left">
                 {sectionsData.kyc.description}
               </p>
 
@@ -518,15 +518,15 @@ footer: "",
                         <h4 className="font-bold text-left text-base sm:text-lg text-white mb-2">
                           {sectionsData.kyc.sections[1].title}
                         </h4>
-                        <p className="text-sm sm:text-base text-justify text-gray-300 mb-2">
+                        <p className="text-sm sm:text-base text-left text-gray-300">
                           {sectionsData.kyc.sections[1].content}
                         </p>
-                        <ul className="space-y-2 ml-4">
+                        <ul className="space-y-2">
                           {sectionsData.kyc.sections[1].points.map((point, idx) => (
-                            <li key={idx} className="text-gray-300 text-sm">• {point}</li>
+                            <li key={idx} className="text-gray-300 text-sm sm:text-base">• {point}</li>
                           ))}
                         </ul>
-                        <p className="text-sm sm:text-base text-justify text-gray-300 mt-2">
+                        <p className="text-sm sm:text-base text-left text-gray-300 mt-2">
                           {sectionsData.kyc.sections[1].footer}
                         </p>
                       </div>
@@ -542,18 +542,18 @@ footer: "",
                           <h4 className="font-bold text-left text-base sm:text-lg text-white mb-2">
                             {step.title}
                           </h4>
-                          <p className="text-sm sm:text-base text-justify text-gray-300">
+                          <p className="text-sm sm:text-base text-left text-gray-300">
                             {step.content}
                           </p>
                           {step.points && (
-                            <ul className="space-y-1 ml-4 mt-2">
+                            <ul className="space-y-2">
                               {step.points.map((point, pIdx) => (
-                                <li key={pIdx} className="text-gray-300 text-sm">• {point}</li>
+                                <li key={pIdx} className="text-gray-300 text-sm sm:text-base">• {point}</li>
                               ))}
                             </ul>
                           )}
                           {step.footer && (
-                            <p className="text-sm text-gray-400 italic mt-2">{step.footer}</p>
+                            <p className="text-sm sm:text-base text-gray-300 mt-2">{step.footer}</p>
                           )}
                         </div>
                       </div>
@@ -568,12 +568,12 @@ footer: "",
                         <h4 className="font-bold text-left text-base sm:text-lg text-white mb-2">
                           {sectionsData.kyc.sections[3].title}
                         </h4>
-                        <p className="text-sm sm:text-base text-justify text-gray-300 mb-2">
+                        <p className="text-sm sm:text-base text-left text-gray-300">
                           {sectionsData.kyc.sections[3].content}
                         </p>
-                        <ul className="space-y-2 ml-4">
+                        <ul className="space-y-2">
                           {sectionsData.kyc.sections[3].points.map((point, idx) => (
-                            <li key={idx} className="text-gray-300 text-sm">• {point}</li>
+                            <li key={idx} className="text-gray-300 text-sm sm:text-base">• {point}</li>
                           ))}
                         </ul>
                       </div>
@@ -592,18 +592,18 @@ footer: "",
                           <h4 className="font-bold text-left text-base sm:text-lg text-white mb-2">
                             {step.title}
                           </h4>
-                          <p className="text-sm sm:text-base text-justify text-gray-300">
+                          <p className="text-sm sm:text-base text-left text-gray-300">
                             {step.content}
                           </p>
                           {step.points && (
-                            <ul className="space-y-1 ml-4 mt-2">
+                            <ul className="space-y-2">
                               {step.points.map((point, pIdx) => (
-                                <li key={pIdx} className="text-gray-300 text-sm">• {point}</li>
+                                <li key={pIdx} className="text-gray-300 text-sm sm:text-base">• {point}</li>
                               ))}
                             </ul>
                           )}
                           {step.footer && (
-                            <p className="text-sm text-gray-400 italic mt-2">{step.footer}</p>
+                            <p className="text-sm sm:text-base text-gray-300 mt-2">{step.footer}</p>
                           )}
                         </div>
                       </div>
@@ -618,10 +618,10 @@ footer: "",
                         <h4 className="font-bold text-left text-base sm:text-lg text-white mb-2">
                           {sectionsData.kyc.sections[4].title}
                         </h4>
-                        <p className="text-sm sm:text-base text-justify text-gray-300">
+                        <p className="text-sm sm:text-base text-left text-gray-300">
                           {sectionsData.kyc.sections[4].content}
                         </p>
-                        <p className="text-sm sm:text-base text-justify text-gray-300 mt-2">
+                        <p className="text-sm sm:text-base text-left text-gray-300 mt-2">
                           {sectionsData.kyc.sections[4].footer}
                         </p>
                       </div>
@@ -636,17 +636,14 @@ footer: "",
                         <h4 className="font-bold text-left text-base sm:text-lg text-white mb-2">
                           {sectionsData.kyc.sections[5].title}
                         </h4>
-                        <p className="text-sm sm:text-base text-justify text-gray-300 mb-2">
+                        <p className="text-sm sm:text-base text-left text-gray-300">
                           {sectionsData.kyc.sections[5].content}
                         </p>
-                        <ul className="space-y-2 ml-4">
+                        <ul className="space-y-2">
                           {sectionsData.kyc.sections[5].points.map((point, idx) => (
-                            <li key={idx} className="text-gray-300 text-sm">• {point}</li>
+                            <li key={idx} className="text-gray-300 text-sm sm:text-base">• {point}</li>
                           ))}
                         </ul>
-                        <p className="text-sm sm:text-base text-justify text-gray-300 mt-2">
-                          {sectionsData.kyc.sections[5].footer}
-                        </p>
                       </div>
                     </div>
                   </div>
@@ -886,3 +883,6 @@ footer: "",
 };
 
 export default LandingPage;
+
+
+
