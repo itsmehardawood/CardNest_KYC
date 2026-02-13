@@ -1,11 +1,54 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState, Suspense } from 'react';
 
-const HomePage = () => {
+const HomePageContent = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [lines, setLines] = useState([]);
+  const [sessionValid, setSessionValid] = useState(null); // null = loading, true = valid, false = invalid
+  const [sessionError, setSessionError] = useState('');
+
+  // Validate session from query param on mount
+  useEffect(() => {
+    const sessionId = searchParams.get('session_id');
+
+    if (!sessionId) {
+      setSessionValid(false);
+      setSessionError('No session ID provided. Please start the KYC process from the app.');
+      return;
+    }
+
+    const validateSession = async () => {
+      try {
+        const res = await fetch(`/api/session?session_id=${encodeURIComponent(sessionId)}`);
+        const data = await res.json();
+
+        if (!res.ok || !data.success) {
+          setSessionValid(false);
+          setSessionError(data.error || 'Invalid or expired session.');
+          return;
+        }
+
+        // Store merchant info in sessionStorage for the rest of the KYC flow
+        try {
+          sessionStorage.setItem('kycSessionId', data.session.session_id);
+          sessionStorage.setItem('kycMerchantId', data.session.merchant_id || '');
+          sessionStorage.setItem('kycSessionActive', 'true');
+        } catch (e) {
+          // Storage error — continue anyway
+        }
+
+        setSessionValid(true);
+      } catch {
+        setSessionValid(false);
+        setSessionError('Unable to validate session. Please try again.');
+      }
+    };
+
+    validateSession();
+  }, [searchParams]);
 
   const handleGetStarted = () => {
     router.push('/document-type');
@@ -50,6 +93,31 @@ const HomePage = () => {
 
     setLines(generated);
   }, []);
+
+  // ── Loading state while validating session ──
+  if (sessionValid === null) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen bg-black">
+        <div className="animate-spin rounded-full h-16 w-16 border-4 border-red-700 border-t-transparent mb-6"></div>
+        <p className="text-white text-lg">Validating session...</p>
+      </div>
+    );
+  }
+
+  // ── Access denied — no valid session ──
+  if (!sessionValid) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen bg-black px-6">
+        <div className="rounded-full bg-red-900/40 p-6 mb-6">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+          </svg>
+        </div>
+        <h1 className="text-white text-3xl font-bold mb-3">Access Denied</h1>
+        <p className="text-gray-300 text-center max-w-md">{sessionError}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col items-center justify-around py-20 h-screen bg-black">
@@ -196,4 +264,17 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default function HomePage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex flex-col items-center justify-center h-screen bg-black">
+          <div className="animate-spin rounded-full h-16 w-16 border-4 border-red-700 border-t-transparent mb-6"></div>
+          <p className="text-white text-lg">Loading...</p>
+        </div>
+      }
+    >
+      <HomePageContent />
+    </Suspense>
+  );
+}

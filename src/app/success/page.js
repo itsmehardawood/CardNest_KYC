@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 
 const SuccessPage = () => {
   const router = useRouter();
+  const [authorized, setAuthorized] = useState(false);
   const [faceImage, setFaceImage] = useState('');
   const [status, setStatus] = useState(null); // Start as null to prevent flash
   const [userId, setUserId] = useState('');
@@ -11,6 +12,16 @@ const SuccessPage = () => {
   const [verificationStage, setVerificationStage] = useState('');
   const [kycImages, setKycImages] = useState({});
   const [kycWarnings, setKycWarnings] = useState([]);
+
+  // Guard: ensure user has a valid session
+  useEffect(() => {
+    const active = sessionStorage.getItem('kycSessionActive');
+    if (active !== 'true') {
+      router.replace('/');
+    } else {
+      setAuthorized(true);
+    }
+  }, [router]);
 
   // Refresh data function
   const refreshData = () => {
@@ -108,6 +119,9 @@ const SuccessPage = () => {
   const primaryLabel = isPass 
     ? (verificationStage === 'document' ? 'Proceed to Face Verification' : 'Finish') 
     : (verificationStage === 'liveness' ? 'Retry Face Scan' : 'Retry Documents');
+
+  // Guard: prevent rendering if not authorized
+  if (!authorized) return null;
 
   return (
     <div className="flex flex-col items-center min-h-screen px-4 py-8 overflow-y-auto bg-black">

@@ -152,6 +152,17 @@ const DocumentVerificationPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const documentType = searchParams.get("type") || "license"; // default to license
+  const [authorized, setAuthorized] = useState(false);
+
+  // Guard: ensure user has a valid session
+  useEffect(() => {
+    const active = sessionStorage.getItem('kycSessionActive');
+    if (active !== 'true') {
+      router.replace('/');
+    } else {
+      setAuthorized(true);
+    }
+  }, [router]);
 
   // Passport only needs front, others need both sides
   const requiresBackSide = documentType !== "passport";
@@ -206,7 +217,7 @@ const DocumentVerificationPage = () => {
     try {
       // Generate user ID for this session
       const userId = `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-      const merchantId = "434343j4n43k4";
+      const merchantId = sessionStorage.getItem('kycMerchantId') || '';
 
       // Map URL document type to API document type
       const documentTypeMap = {
@@ -295,6 +306,9 @@ const DocumentVerificationPage = () => {
   if (isUploading) {
     return <LoadingScreen />;
   }
+
+  // Guard: prevent rendering if not authorized
+  if (!authorized) return null;
 
   return (
     <div className="min-h-screen px-4 py-4 text-white bg-black">

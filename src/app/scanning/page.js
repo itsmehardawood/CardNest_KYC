@@ -22,7 +22,6 @@ const ScanningPage = () => {
   const recordedChunksRef = useRef([]);
   const isVerificationSentRef = useRef(false);
   const streamRef = useRef(null);
-  const MERCHANT_ID = '434343j4n43k4';
 
   const movements = [
     { direction: 'right', label: 'Turn your face to the RIGHT', icon: '→' },
@@ -38,10 +37,12 @@ const ScanningPage = () => {
 
   // Start camera
   useEffect(() => {
-    // Ensure user went through document verification first
+    // Guard: ensure user has a valid session AND completed document verification
+    const active = sessionStorage.getItem('kycSessionActive');
     const stage = sessionStorage.getItem('verificationStage');
-    if (stage !== 'document') {
-      router.push('/document-type');
+    
+    if (active !== 'true' || stage !== 'document') {
+      router.push('/');
       return;
     }
 
@@ -277,7 +278,7 @@ const ScanningPage = () => {
 
       const formData = new FormData();
       formData.append('user_id', userId);
-      formData.append('merchant_id', MERCHANT_ID);
+      formData.append('merchant_id', sessionStorage.getItem('kycMerchantId') || '');
       formData.append('face_video', videoBlob, 'liveness_video.webm');
 
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/kyc/liveness`, {
