@@ -267,6 +267,7 @@ export default function SignUpPage() {
       const userData = {
         user: {
           id: data.user.id,
+          service_type: data.user.service_type || serviceType,
           merchant_id: data.user.merchant_id,
           email: data.user.email,
           phone: data.user.phone_no,

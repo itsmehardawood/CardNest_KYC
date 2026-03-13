@@ -193,22 +193,24 @@ const handleSignIn = async (e) => {
       // Verify OTP with Firebase
       const result = await confirmationResult.confirm(otp);
       const user = result.user;
+      let updatedUserData = apiUserData;
 
       console.log("Firebase OTP verified successfully:", user);
 
       // Update localStorage with Firebase UID
       if (apiUserData) {
-    const updatedUserData = {
-  ...apiUserData,
-  user: {
-    ...apiUserData.user,
-    firebaseUid: user.uid,
-    firebasePhone: user.phoneNumber,
-    otp_verified: true
-  }
-};
+        updatedUserData = {
+          ...apiUserData,
+          user: {
+            ...apiUserData.user,
+            service_type: apiUserData.user?.service_type || serviceType,
+            firebaseUid: user.uid,
+            firebasePhone: user.phoneNumber,
+            otp_verified: true,
+          },
+        };
 
-localStorage.setItem("userData", JSON.stringify(updatedUserData));
+        localStorage.setItem("userData", JSON.stringify(updatedUserData));
         console.log("Updated user data with Firebase info:", updatedUserData);
       }
 

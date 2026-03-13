@@ -229,9 +229,15 @@ function KYCDashboardContent() {
 
     try {
       const formData = new FormData();
+      const stored = JSON.parse(localStorage.getItem("userData") || "{}");
+      const storedServiceType =
+        stored.user?.service_type || stored.service_type || userData?.service_type;
       Object.keys(businessInfo).forEach((key) => {
         if (businessInfo[key]) formData.append(key, businessInfo[key]);
       });
+      if (storedServiceType) {
+        formData.append("service_type", storedServiceType);
+      }
 
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/business-profile`,
@@ -256,7 +262,6 @@ function KYCDashboardContent() {
             localStorage.setItem("businessSubmissionId", submissionId);
           }
           if (userData) {
-            const stored = JSON.parse(localStorage.getItem("userData") || "{}");
             const updated = stored.user
               ? { ...stored, user: { ...stored.user, business_verified: "PENDING" } }
               : { ...stored, business_verified: "PENDING" };

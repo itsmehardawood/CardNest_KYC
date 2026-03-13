@@ -125,29 +125,29 @@ function CryptoDashboardContent() {
     }
   };
 
-  // useEffect(() => {
-  //   const checkAuth = () => {
-  //     const stored = getUserDataFromStorage();
-  //     if (!stored) {
-  //       router.push("/login");
-  //       return;
-  //     }
-  //     const userRole = stored.user?.role;
-  //     if (userRole !== "BUSINESS_USER" && userRole !== "ENTERPRISE_USER") {
-  //       if (userRole === "SUPER_ADMIN") {
-  //         router.push("/admin");
-  //       } else {
-  //         router.push("/login");
-  //       }
-  //       return;
-  //     }
-  //     setIsAuthenticated(true);
-  //     const userObj = stored.user || stored;
-  //     setUserData(userObj);
-  //     setStatus(getStatusFromBusinessVerified(userObj.business_verified));
-  //   };
-  //   checkAuth();
-  // }, [router]);
+  useEffect(() => {
+    const checkAuth = () => {
+      const stored = getUserDataFromStorage();
+      if (!stored) {
+        router.push("/login");
+        return;
+      }
+      const userRole = stored.user?.role;
+      if (userRole !== "BUSINESS_USER" && userRole !== "ENTERPRISE_USER") {
+        if (userRole === "SUPER_ADMIN") {
+          router.push("/admin");
+        } else {
+          router.push("/login");
+        }
+        return;
+      }
+      setIsAuthenticated(true);
+      const userObj = stored.user || stored;
+      setUserData(userObj);
+      setStatus(getStatusFromBusinessVerified(userObj.business_verified));
+    };
+    checkAuth();
+  }, [router]);
 
   useEffect(() => {
     const verified = searchParams.get("verified");
@@ -235,9 +235,15 @@ function CryptoDashboardContent() {
 
     try {
       const formData = new FormData();
+      const stored = JSON.parse(localStorage.getItem("userData") || "{}");
+      const storedServiceType =
+        stored.user?.service_type || stored.service_type || userData?.service_type;
       Object.keys(businessInfo).forEach((key) => {
         if (businessInfo[key]) formData.append(key, businessInfo[key]);
       });
+      if (storedServiceType) {
+        formData.append("service_type", storedServiceType);
+      }
 
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/business-profile`,
@@ -260,7 +266,6 @@ function CryptoDashboardContent() {
             localStorage.setItem("businessSubmissionId", submissionId);
           }
           if (userData) {
-            const stored = JSON.parse(localStorage.getItem("userData") || "{}");
             const updated = stored.user
               ? { ...stored, user: { ...stored.user, business_verified: "PENDING" } }
               : { ...stored, business_verified: "PENDING" };

@@ -19,6 +19,7 @@ import DocumentsVerifications from "../components/Dashboard-Screens/DocumentsVer
 import useAutoLogout from "../hooks/Autologout";
 
 // Loading component for Suspense fallback
+
 function DashboardLoader() {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -330,6 +331,13 @@ function DashboardContent() {
     try {
       // Prepare FormData for API submission
       const formData = new FormData();
+      const storedUserData = JSON.parse(
+        localStorage.getItem("userData") || "{}"
+      );
+      const storedServiceType =
+        storedUserData.user?.service_type ||
+        storedUserData.service_type ||
+        userData?.service_type;
       //formData.append("user_id", userData?.id); // or merchant_id
       // Add all business information fields individually
       Object.keys(businessInfo).forEach((key) => {
@@ -343,6 +351,9 @@ function DashboardContent() {
           formData.append(key, businessInfo[key]);
         }
       });
+      if (storedServiceType) {
+        formData.append("service_type", storedServiceType);
+      }
       //Checking on console
       for (let [key, value] of formData.entries()) {
         // console.log(`${key}: ${value}`);
@@ -388,10 +399,6 @@ function DashboardContent() {
           }
           // Update userData in localStorage with new business_verified status
           if (userData) {
-            // Get the original stored data structure
-            const storedUserData = JSON.parse(
-              localStorage.getItem("userData") || "{}"
-            );
             let updatedUserData;
             if (storedUserData.user) {
               // If nested structure, update the nested user object
